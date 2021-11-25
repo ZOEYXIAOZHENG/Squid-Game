@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default class Register extends React.Component {
     constructor(props) {
@@ -38,40 +39,43 @@ export default class Register extends React.Component {
     render() {
         return (
             <>
-                <h3>Sign Up here:</h3>
-                {this.state.error && (
-                    <div className="error">
-                        Oops!Somenthing wrong, please try again
-                    </div>
-                )}
-                <input
-                    type="text"
-                    name="first"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="First Name"
-                />
-                <input
-                    type="text"
-                    name="last"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="Last Name"
-                />
-                <input
-                    type="email"
-                    name="Email"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="Email"
-                />
-                <input
-                    type="password"
-                    name="password"
-                    onChange={(e) => this.handleChange(e)}
-                    placeholder="Password"
-                />
-                <button onClick={() => this.submit()}>submit</button>
-                <p>
-                    already a member ? please <a href="login">login</a>
-                </p>
+                <div id="register-box">
+                    <h2>Join us:</h2>
+                    {this.state.error && (
+                        <div className="error">
+                            Oops!Somenthing wrong, please try again
+                        </div>
+                    )}
+                    <input
+                        type="text"
+                        name="first"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="First Name"
+                    />
+                    <input
+                        type="text"
+                        name="last"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="Last Name"
+                    />
+                    <input
+                        type="email"
+                        name="Email"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="Email"
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        onChange={(e) => this.handleChange(e)}
+                        placeholder="Password"
+                    />
+                    <button onClick={() => this.submit()}>submit</button>
+                    <p>
+                        already a member ? please{" "}
+                        <Link to="/login">Log in</Link>
+                    </p>
+                </div>
             </>
         );
     }
