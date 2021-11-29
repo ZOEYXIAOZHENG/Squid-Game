@@ -1,9 +1,8 @@
 import { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import Register from "./register"; 
+import Register from "./register";
 import Login from "./login";
 import ResetPassword from "./reset";
-
 
 export default function Welcome() {
     return (

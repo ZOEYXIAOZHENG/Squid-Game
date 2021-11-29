@@ -1,11 +1,20 @@
-export default function ProfilePic({ first, last, imageUrl,logAgain }) {
-    imageUrl = imageUrl || "default.jpeg";
+export default function ProfilePic({
+    first_name,
+    last_name,
+    imageUrl,
+    toggleModal,
+}) {
+    const imageUrl = picture_url || "./public/default.jpeg";
+    const handleClick = () => {
+        uploader();
+    };
+
     return (
-        <img onClick={logAgain}
+        <img
+            onClick={handleClick}
             src={imageUrl}
-            alt={`${first}
-                ${last}`}
-            id="haha"
+            alt={`${first_name} ${last_name}`}
+            className="profilepic"
         />
     );
 }

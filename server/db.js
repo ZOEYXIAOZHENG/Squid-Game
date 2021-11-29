@@ -6,7 +6,7 @@ const db = spicedPg(
         "postgres:postgres:postgres@localhost/socialnetwork"
 );
 
-exports.addnewUser = function (firstName, lastName, email, password) {
+exports.addnewUser = (firstName, lastName, email, password) => {
     return db
         .query(
             `INSERT INTO users (first_name, last_name, email, password) VALUES($1, $2, $3, $4) RETURNING id`,
@@ -20,7 +20,7 @@ exports.addnewUser = function (firstName, lastName, email, password) {
         });
 };
 
-exports.hashPassword = function (plainTextPassword) {
+exports.hashPassword = (plainTextPassword) => {
     return new Promise(function (resolve, reject) {
         bcrypt.genSalt(function (err, salt) {
             if (err) {
@@ -36,7 +36,7 @@ exports.hashPassword = function (plainTextPassword) {
     });
 };
 
-exports.showHashPw = function (email) {
+exports.showHashPw = (email) => {
     return db
         .query(`SELECT password FROM users WHERE email = $1`, [email])
         .then(function (result) {
@@ -47,10 +47,10 @@ exports.showHashPw = function (email) {
         });
 };
 
-exports.checkPassword = function (
+exports.checkPassword = (
     textEnteredInLoginForm,
     hashedPasswordFromDatabase
-) {
+) => {
     return new Promise(function (resolve, reject) {
         bcrypt.compare(
             textEnteredInLoginForm,
@@ -66,7 +66,7 @@ exports.checkPassword = function (
     });
 };
 
-exports.getLoginId = function (email) {
+exports.getLoginId = (email) => {
     return db
         .query(`SELECT id FROM users WHERE email = $1`, [email])
         .then(function (result) {
@@ -74,4 +74,52 @@ exports.getLoginId = function (email) {
         });
 };
 
+module.exports.storeCode = (email, code) => {
+    return db
+        .query(
+            `INSERT INTO reset (email, code)
+               VALUES($1, $2)
+               ON CONFLICT (email) DO UPDATE 
+               SET code = $2`,
+            [email, code]
+        )
+        .then(function (result) {
+            return result.rows[0].email && result.rows[0].code;
+        });
+};
 
+module.exports.verifyResetCode = (code, email) => {
+    const q = `SELECT * FROM otp
+                WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'
+                AND code = $1
+                AND email = $2
+                ORDER BY created_at ASC
+                LIMIT 1`;
+    const params = [code, email];
+    return db.query(q, params);
+};
+
+module.exports.addProfilePic = ({ url, userId }) => {
+    const q = `UPDATE users 
+               SET picture_url = $1
+               WHERE id = $2
+               RETURNING picture_url`;
+    const params = [url, userId];
+    return db.query(q, params);
+};
+
+module.exports.getProfile = (userId) => {
+    const q = `SELECT first_name, last_name, email, picture_url, bio, created_at 
+                    FROM users
+                    WHERE id = $1`;
+    const params = [userId];
+    return db.query(q, params);
+};
+
+module.exports.addBio = ({ bio, userId }) => {
+    const q = `UPDATE users 
+               SET bio = $1
+               WHERE id = $2`;
+    const params = [bio, userId];
+    return db.query(q, params);
+};

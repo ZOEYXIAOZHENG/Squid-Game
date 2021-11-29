@@ -34,10 +34,11 @@ export default class ResetPassword extends React.Component {
                     placeholder="Email"
                 />
                 
-                <button onClick={() => this.submit()}>Reset Password</button>
+                <button onClick={() => this.submit()}>Submit</button>
                 <Link to="/login">Abort</Link>
                 
             </>
         );
     }
 }
+
