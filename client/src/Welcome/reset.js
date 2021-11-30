@@ -29,7 +29,7 @@ export default class ResetPassword extends React.Component {
                 <label> * E-mail Address:</label>
                 <input
                     type="email"
-                    name="Email"
+                    name="email"
                     onChange={(e) => this.handleChange(e)}
                     placeholder="Email"
                 />

@@ -1,25 +1,34 @@
 import React from "react";
 import { Link } from "react-router-dom";
+// import { useState } from "react";
+// import useForm  from "./hooks/useForm";
+// import useFormSubmit from "./hooks/useFormSubmit";
 
 export default class Register extends React.Component {
     constructor(props) {
-        super(props); //  ✅ 能使用 "this" 了. super(props) is a reference to the parents constructor() function.
+        super(props); //  super(props) is a reference to the parents constructor() function.
         this.state = {};
     }
+
+    //-----------   ---- HOOKS Version ---------------------
+    // const[error,setError] = useState(false);
+    // const [userInput,handleChange] = useForm();
+    // const [submit,error] = useFormSubmit("/register",userInput);
+
     handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value,
         });
     }
     submit() {
-        fetch("/register.json", {
+        fetch("/register", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                first: this.state.first,
-                last: this.state.last,
+                first_name: this.state.first,
+                last_name: this.state.last,
                 email: this.state.email,
                 password: this.state.password,
             }),
@@ -27,6 +36,7 @@ export default class Register extends React.Component {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
+                    console.log(123);
                     location.replace("/");
                 } else {
                     this.setState({
@@ -60,7 +70,7 @@ export default class Register extends React.Component {
                     />
                     <input
                         type="email"
-                        name="Email"
+                        name="email"
                         onChange={(e) => this.handleChange(e)}
                         placeholder="Email"
                     />

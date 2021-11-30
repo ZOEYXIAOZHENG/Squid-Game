@@ -7,7 +7,7 @@ const path = require("path");
 
 const uidSafe = require("uid-safe");
 const cryptoRandomString = require("crypto-random-string");
-const s3 = require("./s3");
+const s3 = require("./s3.js");
 
 //------------------------------ STATIC FILES -------------------------------
 
@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
 app.use(
     cookieSession({
-        secret: "COOKIE_SECRET",
+        secret: COOKIE_SECRET,
         maxAge: 1000 * 60 * 60 * 24 * 90,
         sameSite: true, // Web security --- to against CSRF
     })
@@ -62,60 +62,55 @@ const uploader = multer({
 
 //--------------------------------  ROUTE  -----------------------------------------
 
-app.get("/user/id.json", function (req, res) {
+app.get("/user/id", function (req, res) {
     console.log(req.session);
     res.json({
         userId: req.session.userId,
     });
 });
 
-// app.post("/register", function (req, res) {
-//     db.hashPassword(req.body.password)
-//         .then((hash) => {
-//             return db
-//                 .addnewUser(
-//                     req.body.firstname,
-//                     req.body.lastname,
-//                     req.body.email,
-//                     hash
-//                 )
-//                 .then((results) => {
-//                     req.session.userId = results[0].id;
-//                     res.json({ success: true });
-//                 })
-//                 .catch((err) => {
-//                     console.log(err);
-//                     res.json({ success: false });
-//                 });
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//         });
-// });
+app.post("/register", function (req, res) {
+    db.hashPassword(req.body.password)
+        .then((hash) => {
+            return db
+                .addnewUser(req.body.first, req.body.last, req.body.email, hash)
+                .then((id) => {
+                    req.session.userId = id;
+                    res.json({ success: true });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.json({ success: false });
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
 
 // refactor "/register" POST route with async and await:
-app.post("/register", async (req, res) => {
-    const { first_name, last_name, email, password } = req.body;
-    try {
-        const hash = await db.hashPassword(password);
-        const userId = await db.addnewUser(first_name, last_name, email, hash);
-        req.session.userId = userId;
-        res.json({
-            success: true,
-        });
-    } catch (err) {
-        console.log("something went wrong in POST /registration", err);
-        res.json({
-            success: false,
-        });
-    }
-});
+// app.post("/register", async (req, res) => {
+//     const { first_name, last_name, email, password } = req.body;
+//     try {
+//         const hash = await db.hashPassword(password);
+//         const userId = await db.addnewUser(first_name, last_name, email, hash);
+//         req.session.userId = userId;
+//         res.json({
+//             success: true,
+//         });
+//     } catch (err) {
+//         console.log("something went wrong in POST /registration", err);
+//         res.json({
+//             success: false,
+//         });
+//     }
+// });
 
 app.post("/login", (req, res) => {
     db.showHashPw(req.body.email)
         .then((userPw) => {
             if (!userPw) {
-                res.json({ success: false });
+                return res.json({ success: false });
             } else {
                 return db.checkPassword(req.body.password, userPw);
             }
@@ -123,8 +118,7 @@ app.post("/login", (req, res) => {
         .then((doesMatch) => {
             if (doesMatch) {
                 db.getLoginId(req.body.email).then((id) => {
-                    req.session.userId = id;
-                    res.json({ success: true });
+                    return res.json({ success: true });
                 });
             } else {
                 return res.json({ success: false });
@@ -142,12 +136,12 @@ app.post("/login", (req, res) => {
 //2.Generate a secret code and store it so it can be retrieved later
 //3.Put the secret code into an email message and send it to the user
 
-app.post("/password/otp", (req, res) => {
+app.post("/password/reset/start", (req, res) => {
     const code = cryptoRandomString({
         length: 6,
     });
-    const { email } = req.body;
-    db.getLoginId(email)
+    let { email } = req.body;
+    db.confirmUser(email)
         .then((data) => {
             console.log("data", data);
             if (data.rows[0].count > 0) {
@@ -175,13 +169,13 @@ app.post("/password/otp", (req, res) => {
 // 2.Confirm that the code in the request body is the same as the code that was stored
 // 3.Hash the password and replace the old one in the database with the new one
 
-app.post("/password/reset", (req, res) => {
-    const { code, newPassword, email } = req.body;
+app.post("/password/reset/verify", (req, res) => {
+    let { code, newPassword, email } = req.body;
     db.verifyResetCode(code, email)
         .then((data) => {
             console.log("data.rows[0].code", data.rows[0].code);
             if (data.rows[0].code === code) {
-                hash(newPassword)
+                db.hashPassword(newPassword)
                     .then((hashedPassword) => {
                         return db.updatePassword({ hashedPassword, email });
                     })
@@ -201,6 +195,13 @@ app.post("/password/reset", (req, res) => {
 });
 
 //****************************************** */
+
+app.get("/user", function (req, res) {
+    db.getUserData(req.session.userId).then(({ rows }) => {
+        let { first_name, last_name, email, picture_url: imgUrl, bio, created_at } = rows[0];
+        res.json({ first_name, last_name, email, imgUrl, bio, created_at });
+    });
+});
 
 app.get("/profile", function (req, res) {
     db.getProfile(req.session.userId).then(({ rows }) => {

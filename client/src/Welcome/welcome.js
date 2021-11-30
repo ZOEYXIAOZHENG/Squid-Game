@@ -1,17 +1,16 @@
 import { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import Register from "./register";
-import Login from "./login";
-import ResetPassword from "./reset";
+import Register from "./register.js";
+import Login from "./login.js";
+import ResetPassword from "./reset.js";
 
 export default function Welcome() {
     return (
         <div id="welcome">
-            <div id="title"></div>
-            <h1>Social Network</h1>
-            <h3>CONNECTING CREATIVE PEOPLE</h3>
+            
+            <h1>Squid Game</h1>
 
-            <img className="logo" src="/logo.gif" alt="logo" />
+            <img className="logo" src="/logo.jpeg" alt="logo" />
             <BrowserRouter>
                 <div>
                     <Route exact path="/">

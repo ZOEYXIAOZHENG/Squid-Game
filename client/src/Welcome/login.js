@@ -48,7 +48,7 @@ export default class Login extends React.Component {
 
                 <input
                     type="email"
-                    name="Email"
+                    name="mail"
                     onChange={(e) => this.handleChange(e)}
                     placeholder="Email"
                 />
@@ -61,8 +61,9 @@ export default class Login extends React.Component {
                 <button onClick={() => this.submit()}>login</button>
                 <Link to="/">Sign up</Link>
                 <p>
-                    Forgot password ? <Link to="/reset-password">click here</Link> to reset
-                    your password
+                    Forgot password ?{" "}
+                    <Link to="/reset-password">click here</Link> to reset your
+                    password
                 </p>
             </>
         );

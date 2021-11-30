@@ -1,16 +1,14 @@
 import ReactDOM from "react-dom";
-import Welcome from "./welcome";
+import Welcome from "./Welcome/welcome.js";
+import App from "./App/app.js";
 
-fetch("/user/id.json")
+fetch("/user/id")
     .then((response) => response.json())
     .then((data) => {
         if (!data.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
             console.log("Cookies GET💡 then render main");
-            ReactDOM.render(
-                <img src="./assets/logo.gif" alt="logo" />,
-                document.querySelector("main")
-            );
+            ReactDOM.render(<App />, document.querySelector("main"));
         }
     });
