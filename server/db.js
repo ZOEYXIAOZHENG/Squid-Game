@@ -77,7 +77,7 @@ module.exports.getLoginId = (email) => {
 
 module.exports.storeCode = (email, code) => {
     return db.query(
-        `INSERT INTO reset (email, code)
+        `INSERT INTO otp (email, code)
                VALUES($1, $2)
                ON CONFLICT (email) DO UPDATE 
                SET code = $2`,
@@ -89,7 +89,7 @@ module.exports.verifyResetCode = (code, email) => {
     const q = `SELECT * FROM otp
                 WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'
                 AND code = $1
-                AND email = $
+                AND email = $2
                 ORDER BY created_at ASC
                 LIMIT 1`;
     const params = [code, email];
@@ -113,10 +113,11 @@ module.exports.getProfile = (userId) => {
     return db.query(q, params);
 };
 
-module.exports.addBio = ({ bio, userId }) => {
+module.exports.addBio = (userId, bio) => {
     const q = `UPDATE users 
                SET bio = $1
-               WHERE id = $2`;
+               WHERE id = $2
+               RETURNING bio`;
     const params = [bio, userId];
     return db.query(q, params);
 };
@@ -126,17 +127,6 @@ module.exports.updatePassword = (hashedPassword, email) => {
                 SET password = $1
                 WHERE email = $2`;
     const params = [hashedPassword, email];
-    return db.query(q, params);
-};
-
-module.exports.verifyResetCode = (code, email) => {
-    const q = `SELECT * FROM reset_codes
-                WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'
-                AND code = $1
-                AND email = $2
-                ORDER BY created_at ASC
-                LIMIT 1`;
-    const params = [code, email];
     return db.query(q, params);
 };
 

@@ -13,21 +13,21 @@ const ses = new aws.SES({
     region: "eu-west-1", // Make sure this corresponds to the region in which you have verified your email address (or 'eu-west-1' if you are using the Spiced credentials)
 });
 
-module.exports.sendEmail = () => {
+module.exports.sendEmail = (email, subject, body) => {
     return ses
         .sendEmail({
-            Source: "soft.lanyard@spicedling.email",
+            Source: "You Know Whom<soft.lanyard@spicedling.email>",
             Destination: {
-                ToAddresses: ["xiaozheng.zoey@gmail.com"],
+                ToAddresses: [email],
             },
             Message: {
                 Body: {
                     Text: {
-                        Data: "[Content]We can't wait to start working with you! Please arrive on Monday at 9:00 am. Dress code is casual so don't suit up.",
+                        Data: body,
                     },
                 },
                 Subject: {
-                    Data: "[Subject]Your Application Has Been Accepted!",
+                    Data: subject,
                 },
             },
         })

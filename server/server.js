@@ -118,6 +118,7 @@ app.post("/login", (req, res) => {
         .then((doesMatch) => {
             if (doesMatch) {
                 db.getLoginId(req.body.email).then((id) => {
+                    req.session.userId = id;
                     return res.json({ success: true });
                 });
             } else {
@@ -130,10 +131,10 @@ app.post("/login", (req, res) => {
         });
 });
 
-// *********这里有问题！！写出rest-password的路径:
+// **********************************  Rest-Password  **************************************:
 
-//1.Confirm that there is a user with the submitted email address
-//2.Generate a secret code and store it so it can be retrieved later
+//1.Confirm with the submitted user email address
+//2.Generate a secret code and STORE it, so it can be retrieved later
 //3.Put the secret code into an email message and send it to the user
 
 app.post("/password/reset/start", (req, res) => {
@@ -143,65 +144,57 @@ app.post("/password/reset/start", (req, res) => {
     let { email } = req.body;
     db.confirmUser(email)
         .then((data) => {
-            console.log("data", data);
-            if (data.rows[0].count > 0) {
+            if (data.rows.length > 0) {
                 db.storeCode(email, code).then(() => {
                     sendEmail(
-                        `Dear user ${email}`,
-                        "This is one-time code to reset your password",
-                        `Please reset your password with this code:
-                    
-                    ${code}
-                    
-                    This code will expire in 10 minutes.`
+                        email,
+                        "Reset Password",
+                        "This is one-time code to reset your password\n" +
+                            "Please reset your password with this code\n" +
+                            `${code}\nThis code will expire in 10 minutes.`
                     );
                 });
+                return res.json({ success: true });
+            } else {
+                return res.json({ success: false });
             }
-            return res.json({ success: true });
         })
         .catch((err) => {
-            console.log("err in confirmUser", err);
+            console.log("err in POST confirmUser", err);
         });
 });
 
 //When the server receives this request, it should do the following before sending a response indicating success:
 // 1.Find the stored code for the email address
-// 2.Confirm that the code in the request body is the same as the code that was stored
+// 2.Confirm that the code is same as the code that was stored
 // 3.Hash the password and replace the old one in the database with the new one
 
 app.post("/password/reset/verify", (req, res) => {
-    let { code, newPassword, email } = req.body;
-    db.verifyResetCode(code, email)
+    let { email, newPass, verCode } = req.body;
+    db.verifyResetCode(verCode, email)
         .then((data) => {
             console.log("data.rows[0].code", data.rows[0].code);
-            if (data.rows[0].code === code) {
-                db.hashPassword(newPassword)
+            if (data.rows[0].code === verCode) {
+                db.hashPassword(newPass)
                     .then((hashedPassword) => {
-                        return db.updatePassword({ hashedPassword, email });
+                        return db.updatePassword(hashedPassword, email);
                     })
                     .then(() => {
                         res.json({ success: true });
                     })
                     .catch((err) => {
-                        console.log("error in updatePassword", err);
+                        console.log("err in POST ResetPassword", err);
                         res.json({ error: true });
                     });
             }
         })
         .catch((err) => {
-            console.log("error in verifyResetCode", err);
+            console.log("err in verifyResetCode", err);
             res.json({ error: true });
         });
 });
 
-//****************************************** */
-
-app.get("/user", function (req, res) {
-    db.getUserData(req.session.userId).then(({ rows }) => {
-        let { first_name, last_name, email, picture_url: imgUrl, bio, created_at } = rows[0];
-        res.json({ first_name, last_name, email, imgUrl, bio, created_at });
-    });
-});
+//******************************************************************************************/
 
 app.get("/profile", function (req, res) {
     db.getProfile(req.session.userId).then(({ rows }) => {
@@ -237,4 +230,23 @@ app.get("*", function (req, res) {
 
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
+});
+
+app.post("/bioedit.json", (req, res) => {
+    const userId = req.session.userId;
+    const bio = req.body.draftBio;
+
+    db.addBio(userId, bio)
+        .then((resp) => {
+            res.json({ bio: resp.rows[0].bio, success: true });
+        })
+        .catch((err) => {
+            console.log(
+                "Exception thrown in /upload/bio.json when calling db.addBio: ",
+                err
+            );
+            res.json({
+                error: true,
+            });
+        });
 });

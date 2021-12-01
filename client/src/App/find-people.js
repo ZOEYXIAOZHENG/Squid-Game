@@ -4,19 +4,10 @@ export default function FindPeople() {
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
-    // only runs once, like componentDidMount
     useEffect(() => {
-        console.log("component mounted");
-        fetch("/users")
-            .then((res) => res.json())
-            .then((results) => {
-                console.log("results: ", results);
-                setUsers(results);
-            });
-    }, []);
+        console.log("💛FindPeople component mounted!!");
 
-    useEffect(() => {
-        fetch(`https://spicedworld.herokuapp.com/?q=${searchTerm}`)
+        fetch("/users")
             .then((response) => response.json())
             .then((results) => {
                 console.log("results: ", results);
@@ -31,24 +22,25 @@ export default function FindPeople() {
     // };
 
     return (
-        <div>
-            <input
-                type="text"
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-
-            {users.map((each) => (
-                <div>
-                    <h1 key={each.id}>
-                        {each.first_name} {each.last_name}
-                    </h1>
-                    <img
-                        className="find"
-                        src={each.picture_url}
-                        alt={`${each.first_name} ${each.last_name}`}
-                    />
-                </div>
-            ))}
-        </div>
+        <>
+            <div className="search-ppl">
+                <input
+                    type="text"
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {users.map((each) => (
+                    <div key={each.id}>
+                        <h1>
+                            {each.first_name} {each.last_name}
+                        </h1>
+                        <img
+                            className="find"
+                            src={each.picture_url}
+                            alt={`${each.first_name} ${each.last_name}`}
+                        />
+                    </div>
+                ))}
+            </div>
+        </>
     );
 }

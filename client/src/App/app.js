@@ -1,10 +1,11 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
-import { ProfilePic } from "./profilepic.js";
+// import { Link } from "react-router-dom";
+import ProfilePic from "./profilepic.js";
 import { BrowserRouter, Route } from "react-router-dom";
-import Uploader from "./uploader.js";
+// import Uploader from "./uploader.js";
 import Profile from "./profile.js";
 import FindPeople from "./find-people.js";
+import OtherProfile from "./otherProfile.js";
 
 export default class App extends Component {
     constructor(props) {
@@ -17,11 +18,11 @@ export default class App extends Component {
         this.profileImage = this.profileImage.bind(this);
         this.updateBio = this.updateBio.bind(this);
     }
-
+    //only mounted once
     componentDidMount() {
         console.log("App component mounted");
         //make a fetch request to get data for currently logged in user
-        fetch("/user")
+        fetch("/profile")
             .then((res) => res.json())
             .then((data) => {
                 console.log("data in fetch profile", data[0]);
@@ -31,7 +32,7 @@ export default class App extends Component {
     }
 
     toggleUploader() {
-        console.log("button was clicked");
+        console.log("toggleUploader was clicked");
         this.setState({
             uploaderIsVisible: !this.state.uploaderIsVisible,
         });
@@ -48,9 +49,7 @@ export default class App extends Component {
     }
 
     updateBio({ bio }) {
-        // console.log("bio in parent", bio)
         this.setState({ bio });
-        // console.log("parent --> this.state after updateBio -->", this.state);
     }
 
     render() {
@@ -91,12 +90,15 @@ export default class App extends Component {
                         )}
                     </Route>
 
-                    {this.state.uploaderIsVisible && (
+                    {/* {this.state.uploaderIsVisible && (
                         <Uploader
                             profileImage={(val) => this.profileImage(val)}
                             uploader={() => this.toggleUploader()}
                         />
-                    )}
+                    )} */}
+                    <Route path="/user/:id">
+                        <OtherProfile />
+                    </Route>
                 </BrowserRouter>
             </>
         );

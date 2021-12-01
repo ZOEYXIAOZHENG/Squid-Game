@@ -3,12 +3,12 @@ import { Component } from "react";
 export default class BioEditor extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             editor: false,
         };
         this.handleChange = this.handleChange.bind(this);
-        this.uploadBio = this.uploadBio.bind(this);
+        this.setBio = this.setBio.bind(this);
+        this.textareaToggle = this.textareaToggle.bind(this);
     }
 
     textareaToggle() {
@@ -23,9 +23,9 @@ export default class BioEditor extends Component {
         });
     }
 
-    uploadBio() {
+    setBio() {
         console.log("我在上传BIO！");
-        fetch("/bioedit", {
+        fetch("/bioedit.json", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -46,7 +46,9 @@ export default class BioEditor extends Component {
                         defaultValue={this.props.bio}
                         name="draftBio"
                         onChange={this.handleChange}
+                        placeholder="tell us your story..."
                     />
+                    // <input name="age"/>
                 )}
 
                 {!this.state.editor && (
@@ -58,11 +60,11 @@ export default class BioEditor extends Component {
                 {this.state.editor && (
                     <button
                         onClick={() => {
-                            this.updateBio();
+                            this.setBio();
                             this.textareaToggle();
                         }}
                     >
-                        Save
+                        Save Data
                     </button>
                 )}
             </div>

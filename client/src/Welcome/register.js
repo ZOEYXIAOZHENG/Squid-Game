@@ -27,8 +27,8 @@ export default class Register extends React.Component {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                first_name: this.state.first,
-                last_name: this.state.last,
+                first: this.state.first,
+                last: this.state.last,
                 email: this.state.email,
                 password: this.state.password,
             }),
@@ -50,7 +50,7 @@ export default class Register extends React.Component {
         return (
             <>
                 <div id="register-box">
-                    <h2>Join us:</h2>
+                    <h2>Sign up:</h2>
                     {this.state.error && (
                         <div className="error">
                             Oops!Somenthing wrong, please try again

@@ -44,16 +44,20 @@ export default class Uploader extends Component {
 
     render() {
         return (
-            <div className="uploader-box">
-                <h1 onClick={this.props.toggleUploader}>Uploader component</h1>
-                <input
-                    name="file"
-                    type="file"
-                    accept="image/*"
-                    onChange={this.setFile}
-                />
-                <button onClick={this.upload}>Submit</button>
-            </div>
+            <>
+                <div className="uploader-box">
+                    <h1 onClick={this.props.toggleUploader}>
+                        Uploader component
+                    </h1>
+                    <input
+                        name="file"
+                        type="file"
+                        accept="image/*"
+                        onChange={this.setFile}
+                    />
+                    <button onClick={this.upload}>Submit</button>
+                </div>
+            </>
         );
     }
 }

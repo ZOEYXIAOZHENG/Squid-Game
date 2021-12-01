@@ -14,7 +14,7 @@ export default class Login extends React.Component {
     }
 
     submit() {
-        fetch("/login.json", {
+        fetch("/login", {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -48,7 +48,7 @@ export default class Login extends React.Component {
 
                 <input
                     type="email"
-                    name="mail"
+                    name="email"
                     onChange={(e) => this.handleChange(e)}
                     placeholder="Email"
                 />

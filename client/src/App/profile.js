@@ -1,4 +1,4 @@
-import { ProfilePic } from "./profilepic.js";
+import ProfilePic from "./profilepic.js";
 import BioEditor from "./bioeditor.js";
 
 export default function Profile({
@@ -9,16 +9,13 @@ export default function Profile({
     updateBio,
 }) {
     return (
-        <>
-            <div>
-                <h1>User Profile Page</h1>
-                <h3>
-                    {first_name}
-                    {last_name}
-                </h3>
-                <BioEditor updateBio={updateBio} bio={bio} />
-                <ProfilePic imageUrl={picture_url} />
-            </div>
-        </>
+        <div className="profile-box">
+            <h1>
+                {first_name} {"  "} {last_name}
+            </h1>
+            <BioEditor updateBio={updateBio} bio={bio} />
+            {bio && <h1>Bio: {bio}</h1>}
+            <ProfilePic imageUrl={picture_url} />
+        </div>
     );
 }
