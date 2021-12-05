@@ -199,6 +199,11 @@ img.find {
     top: 50vh;
     right: 7vw;
 }
+.link2 {
+    position: fixed;
+    top: 60vh;
+    right: 7vw;
+}
 .search-ppl {
     position: fixed;
     top: 38vh;
@@ -210,6 +215,6 @@ input {
 }
 
 .view-ppl img {
-    width:300px;
-    height:auto;
+    width: 300px;
+    height: auto;
 }

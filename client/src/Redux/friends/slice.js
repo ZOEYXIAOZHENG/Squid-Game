@@ -9,7 +9,7 @@ export default function friendsReducer(friendsAndWannabes = null, action) {
             } else {
                 return {
                     ...person,
-                    accepted: action.type == "friends/requestAccepted",
+                    accepted: true,
                 };
             }
         });
@@ -19,7 +19,6 @@ export default function friendsReducer(friendsAndWannabes = null, action) {
             (person) => person.id !== action.payload.id
         );
     }
-
     return friendsAndWannabes;
 }
 

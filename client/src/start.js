@@ -13,12 +13,6 @@ const store = createStore(
     composeWithDevTools(applyMiddleware(immutableState.default()))
 );
 
-const app = (
-    <Provider store={store}>
-        <App />
-    </Provider>
-);
-
 fetch("/user/id")
     .then((response) => response.json())
     .then((data) => {

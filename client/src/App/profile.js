@@ -27,6 +27,9 @@ export default function Profile({
             <div className="link">
                 <Link to="/users">find people</Link>
             </div>
+            <div className="link2">
+                <Link to="/Friends">Friends</Link>
+            </div>
         </div>
     );
 }

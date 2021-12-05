@@ -109,6 +109,7 @@ app.post("/relation/:otherId.json", (req, res) => {
     const ownId = req.session.userId;
     const otherId = req.params.otherId;
     let { relation } = req.body;
+    console.log(req.body);
 
     if (relation === "Make Friend Request") {
         db.makeFriendRequest(ownId, otherId)
@@ -135,6 +136,16 @@ app.post("/relation/:otherId.json", (req, res) => {
                 console.log(err);
             });
     }
+});
+
+app.get("/friends-and-wannabes", (req, res) => {
+    db.getFriendsAndWannabes(req.session.userId)
+        .then((resp) => {
+            return res.json(resp.rows);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 });
 
 app.post("/register", function (req, res) {
