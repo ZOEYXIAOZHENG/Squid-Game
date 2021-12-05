@@ -6,10 +6,10 @@ import ResetPassword from "./reset.js";
 
 export default function Welcome() {
     return (
-        <div id="welcome">
-            <h1>Squid Game</h1>
-
-            <img className="logo" src="/logo.jpeg" alt="logo" />
+        <div className="welcome">
+            
+            <img className="logo" src="/2.jpeg" alt="logo" />
+            <div className="base"></div>
             <BrowserRouter>
                 <div>
                     <Route exact path="/">

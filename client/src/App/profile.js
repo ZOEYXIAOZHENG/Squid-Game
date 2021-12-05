@@ -18,9 +18,9 @@ export default function Profile({
                     <h1>
                         {first} {"  "} {last}
                     </h1>
-                    <h1>ID:{userId}</h1>
+                    <h2>ID:{userId}</h2>
                     <BioEditor updateBio={updateBio} bio={bio} />
-                    {bio && <h1>Bio: {bio}</h1>}
+                    {bio && <h4>Bio: {bio}</h4>}
                 </div>
                 <ProfilePic pictureUrl={pictureUrl} uploader={uploader} />
             </div>
@@ -30,6 +30,7 @@ export default function Profile({
             <div className="link2">
                 <Link to="/Friends">Friends</Link>
             </div>
+            <a href="/logout">logout</a>
         </div>
     );
 }

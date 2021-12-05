@@ -56,6 +56,7 @@ export default class Uploader extends Component {
                         onChange={this.setFile}
                     />
                     <button onClick={this.upload}>Update</button>
+                    <img src="./hint.png" />
                     <div
                         onClick={this.props.toggleUploader}
                         className="close"

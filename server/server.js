@@ -97,6 +97,11 @@ app.get("/user/:id.json", (req, res) => {
         });
 });
 
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/");
+});
+
 app.get("/relation/:id.json", (req, res) => {
     db.getRelation(req.session.userId, req.params.id)
         .then((resp) => res.json(resp.rows))

@@ -26,7 +26,7 @@ export default function OtherProfile() {
             <h3>
                 {users.first} {users.last}
             </h3>
-            <h3>email: {users.email}</h3>
+            <h2>email: {users.email}</h2>
             {users.bio && <p>{users.bio}</p>}
             <FriendBtn />
         </div>
