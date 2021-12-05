@@ -20,6 +20,7 @@ export default class Register extends React.Component {
             [e.target.name]: e.target.value,
         });
     }
+
     submit() {
         fetch("/register", {
             method: "POST",
@@ -39,8 +40,18 @@ export default class Register extends React.Component {
                     console.log(123);
                     location.replace("/");
                 } else {
+                    let error_message = "";
+                    if (
+                        data.error &&
+                        data.error.detail.includes("already exists")
+                    ) {
+                        error_message = "duplicate";
+                    } else {
+                        error_message = "error";
+                    }
+
                     this.setState({
-                        error: true,
+                        error: error_message,
                     });
                 }
             });
@@ -51,9 +62,14 @@ export default class Register extends React.Component {
             <>
                 <div id="register-box">
                     <h2>Sign up:</h2>
-                    {this.state.error && (
+                    {this.state.error === "error" && (
                         <div className="error">
                             Oops!Somenthing wrong, please try again
+                        </div>
+                    )}
+                    {this.state.error === "duplicate" && (
+                        <div className="error">
+                            This email has been registered, please login
                         </div>
                     )}
                     <input

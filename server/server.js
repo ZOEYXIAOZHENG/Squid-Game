@@ -69,6 +69,74 @@ app.get("/user/id", function (req, res) {
     });
 });
 
+app.get("/users.json", (req, res) => {
+    db.getTopUsers()
+        .then((resp) => res.json(resp.rows))
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/user-search/:letters.json", (req, res) => {
+    db.searchUsers(req.params.letters, req.session.userId).then((resp) =>
+        res.json(resp.rows)
+    );
+});
+
+app.get("/user/:id.json", (req, res) => {
+    db.getUserData(req.params.id)
+        .then((resp) => {
+            console.log(req.params.id, req.session.userId);
+            if (req.params.id == req.session.userId) {
+                return res.json({ isUser: true });
+            }
+            return res.json({ isUser: false, data: resp.rows });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/relation/:id.json", (req, res) => {
+    db.getRelation(req.session.userId, req.params.id)
+        .then((resp) => res.json(resp.rows))
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.post("/relation/:otherId.json", (req, res) => {
+    const ownId = req.session.userId;
+    const otherId = req.params.otherId;
+    let { relation } = req.body;
+
+    if (relation === "Make Friend Request") {
+        db.makeFriendRequest(ownId, otherId)
+            .then(() => res.json({ relation: "Cancel Friend Request" }))
+            .catch((err) => {
+                console.log(err);
+            });
+    } else if (relation === "Cancel Friend Request") {
+        db.cancel(ownId, otherId)
+            .then(() => res.json({ relation: "Make Friend Request" }))
+            .catch((err) => {
+                console.log(err);
+            });
+    } else if (relation === "End Friendship") {
+        db.unfriend(ownId, otherId)
+            .then(() => res.json({ relation: "Make Friend Request" }))
+            .catch((err) => {
+                console.log(err);
+            });
+    } else if (relation === "Accept Friend Request") {
+        db.accept(ownId, otherId)
+            .then(() => res.json({ relation: "End Friendship" }))
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+});
+
 app.post("/register", function (req, res) {
     db.hashPassword(req.body.password)
         .then((hash) => {
@@ -79,12 +147,12 @@ app.post("/register", function (req, res) {
                     res.json({ success: true });
                 })
                 .catch((err) => {
-                    console.log(err);
-                    res.json({ success: false });
+                    console.log("Here is a ", err);
+                    res.json({ success: false, error: err });
                 });
         })
         .catch((err) => {
-            console.log(err);
+            console.log("err on POST regiester:", err);
         });
 });
 
@@ -228,10 +296,6 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
-    console.log("I'm listening.");
-});
-
 app.post("/bioedit.json", (req, res) => {
     const userId = req.session.userId;
     const bio = req.body.draftBio;
@@ -249,4 +313,8 @@ app.post("/bioedit.json", (req, res) => {
                 error: true,
             });
         });
+});
+
+app.listen(process.env.PORT || 3001, function () {
+    console.log("I'm listening.");
 });

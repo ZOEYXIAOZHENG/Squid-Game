@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import ProfilePic from "./profilepic.js";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import FriendBtn from "./friendBtn.js";
@@ -10,22 +9,24 @@ export default function OtherProfile() {
     const history = useHistory();
 
     useEffect(() => {
-        fetch(`/user/:${id}`)
+        fetch(`/user/${id}.json`)
             .then((res) => res.json())
             .then((results) => {
-                if (results.error) {
-                    console.log("results: ", results);
+                if (results.isUser) {
+                    history.replace("/");
+                } else {
+                    setUsers(results.data[0]);
                 }
-                setUsers(results);
             });
     }, []);
 
     return (
         <div className="view-ppl">
-            <ProfilePic picture_url={users.picture_url} picBig="picBig" />
+            <img src={users.picture_url || "/default.jpeg"} />
             <h3>
                 {users.first} {users.last}
             </h3>
+            <h3>email: {users.email}</h3>
             {users.bio && <p>{users.bio}</p>}
             <FriendBtn />
         </div>

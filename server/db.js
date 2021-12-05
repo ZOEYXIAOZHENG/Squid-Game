@@ -144,3 +144,66 @@ module.exports.getUserData = (userId) => {
     const params = [userId];
     return db.query(q, params);
 };
+
+module.exports.getTopUsers = () => {
+    const q = `SELECT first_name, last_name, id, picture_url FROM users
+                ORDER BY id DESC
+                LIMIT 3`;
+    return db.query(q);
+};
+
+module.exports.searchUsers = (letters, userId) => {
+    const q = `
+    SELECT 
+        first_name, last_name, picture_url, id
+    FROM users 
+    WHERE id != $2
+        AND (first_name ILIKE $1 
+            OR last_name ILIKE $1 
+            OR CONCAT (first_name, ' ', last_name) ILIKE $1)`;
+    const params = [letters + `%`, userId];
+    return db.query(q, params);
+};
+
+module.exports.getRelation = (sender, recipient) => {
+    const q = `
+    SELECT * FROM friendships
+    WHERE (recipient_id = $1 AND sender_id = $2)
+    OR (recipient_id = $2 AND sender_id = $1);`;
+    const params = [sender, recipient];
+    return db.query(q, params);
+};
+
+module.exports.makeFriendRequest = (sender, recipient) => {
+    const q = `
+    INSERT INTO friendships (sender_id, recipient_id, accepted)
+    VALUES($1, $2, false)`;
+    const params = [sender, recipient];
+    return db.query(q, params);
+};
+
+module.exports.unfriend = (sender, recipient) => {
+    const q = `
+    DELETE FROM friendships 
+    WHERE (sender_id = $1 AND recipient_id = $2) OR (sender_id = $2 AND recipient_id = $1)`;
+    const params = [sender, recipient];
+    return db.query(q, params);
+};
+
+module.exports.cancel = (sender, recipient) => {
+    const q = `
+    DELETE FROM friendships
+    WHERE sender_id = $1 AND recipient_id = $2`;
+    const params = [sender, recipient];
+    return db.query(q, params);
+};
+
+module.exports.accept = (sender, recipient) => {
+    const q = `
+    UPDATE friendships 
+    SET accepted = true
+    WHERE sender_id = $2
+    AND recipient_id = $1`;
+    const params = [sender, recipient];
+    return db.query(q, params);
+};

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function FindPeople() {
     const [users, setUsers] = useState([]);
@@ -6,38 +7,47 @@ export default function FindPeople() {
 
     useEffect(() => {
         console.log("💛FindPeople component mounted!!");
-
-        fetch("/users")
+        fetch(`/users.json`, { method: "GET" })
             .then((response) => response.json())
             .then((results) => {
                 console.log("results: ", results);
                 setUsers(results);
             });
-    }, [searchTerm]);
+    }, []);
 
-    // const updateUsersList = (e) => {
-    //     if (e.key === "Enter") {
-    //         setUsers([...users, e.target.value]);
-    //     }
-    // };
+    useEffect(() => {
+        if (searchTerm) {
+            fetch(`/user-search/${searchTerm}.json`)
+                .then((response) => response.json())
+                .then((results) => {
+                    setUsers(results);
+                });
+        } else {
+            return;
+        }
+    }, [searchTerm]);
 
     return (
         <>
             <div className="search-ppl">
+                <h3>Are you looking for someone in particular?</h3>
                 <input
                     type="text"
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                <h3>New joined players:</h3>
                 {users.map((each) => (
                     <div key={each.id}>
-                        <h1>
-                            {each.first_name} {each.last_name}
-                        </h1>
-                        <img
-                            className="find"
-                            src={each.picture_url}
-                            alt={`${each.first_name} ${each.last_name}`}
-                        />
+                        <Link to={`/user/${each.id}`}>
+                            <h2>
+                                {each.first_name} {each.last_name}
+                            </h2>
+                            <img
+                                className="find"
+                                src={each.picture_url}
+                                alt={`${each.first_name} ${each.last_name}`}
+                            />
+                        </Link>
                     </div>
                 ))}
             </div>

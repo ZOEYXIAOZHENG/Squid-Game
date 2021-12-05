@@ -1,21 +1,21 @@
 import { Component } from "react";
-// import { Link } from "react-router-dom";
 import ProfilePic from "./profilepic.js";
 import { BrowserRouter, Route } from "react-router-dom";
-// import Uploader from "./uploader.js";
 import Profile from "./profile.js";
 import FindPeople from "./find-people.js";
 import OtherProfile from "./otherProfile.js";
+import Uploader from "./uploader.js";
+import Friends from "./friends.js";
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            uploaderIsVisible: false,
             profile: true,
+            uploaderIsVisible: true,
         };
         this.toggleUploader = this.toggleUploader.bind(this);
-        this.profileImage = this.profileImage.bind(this);
+        this.updateProfileImage = this.updateProfileImage.bind(this);
         this.updateBio = this.updateBio.bind(this);
     }
     //only mounted once
@@ -27,6 +27,11 @@ export default class App extends Component {
             .then((data) => {
                 console.log("data in fetch profile", data[0]);
                 this.setState(data);
+                if (this.state.picture_url) {
+                    this.setState({
+                        uploaderIsVisible: !this.state.uploaderIsVisible,
+                    });
+                }
                 console.log("this.state in app:", this.state);
             });
     }
@@ -38,14 +43,15 @@ export default class App extends Component {
         });
     }
 
-    profileImage(picture_url) {
+    updateProfileImage(picture_url) {
         this.setState({ picture_url });
+        console.log(this.state);
 
         setTimeout(() => {
             this.setState({
                 uploaderIsVisible: false,
             });
-        }, 1000);
+        }, 300);
     }
 
     updateBio({ bio }) {
@@ -57,19 +63,23 @@ export default class App extends Component {
             <>
                 <BrowserRouter>
                     {this.state.uploaderIsVisible && (
-                        <uploaderIsVisible
+                        <Uploader
                             toggleUploader={this.toggleUploader}
-                            profileImage={this.profileImage}
+                            updateProfileImage={this.updateProfileImage}
                         />
                     )}
 
                     <header>
-                        <img className="applogo" src="./logo.jpeg" alt="logo" />
+                        <img
+                            className="applogo"
+                            src="./old_logo.jpeg"
+                            alt="logo"
+                        />
                         <ProfilePic
                             uploader={() => this.toggleUploader()}
-                            first_name={this.state.first_name}
-                            last_name={this.state.last_name}
-                            picture_url={this.state.picture_url}
+                            first={this.state.first_name}
+                            last={this.state.last_name}
+                            pictureUrl={this.state.picture_url}
                         />
                     </header>
 
@@ -77,15 +87,24 @@ export default class App extends Component {
                         <FindPeople />
                     </Route>
 
+                    <Route path="/user/:id">
+                        <OtherProfile />
+                    </Route>
+
+                    <Route path="/friends">
+                        <Friends />
+                    </Route>
+
                     <Route exact path="/">
                         {this.state.profile && (
                             <Profile
                                 updateBio={this.updateBio}
                                 uploader={() => this.toggleUploader()}
-                                first_name={this.state.first_name}
-                                last_name={this.state.last_name}
-                                picture_url={this.state.picture_url}
+                                first={this.state.first_name}
+                                last={this.state.last_name}
+                                pictureUrl={this.state.picture_url}
                                 bio={this.state.bio}
+                                userId={this.props.userId}
                             />
                         )}
                     </Route>
@@ -96,9 +115,6 @@ export default class App extends Component {
                             uploader={() => this.toggleUploader()}
                         />
                     )} */}
-                    <Route path="/user/:id">
-                        <OtherProfile />
-                    </Route>
                 </BrowserRouter>
             </>
         );

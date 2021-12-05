@@ -1,16 +1,17 @@
 export default function ProfilePic({
     first_name,
     last_name,
-    picture_url,
-    toggleUploader,
+    pictureUrl,
+    uploader,
+    className,
 }) {
-    picture_url = picture_url || "./default.jpeg";
+    pictureUrl = pictureUrl || "./default.jpeg";
 
     return (
         <div>
             <img
-                onClick={toggleUploader}
-                src={picture_url}
+                onClick={uploader}
+                src={pictureUrl}
                 alt={`${first_name} ${last_name}`}
                 className="profilepic"
             />

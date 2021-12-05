@@ -22,20 +22,20 @@ export default class Uploader extends Component {
         const formData = new FormData();
         formData.append("file", this.state.file);
 
-        fetch("/upload", {
+        fetch("/profile/upload", {
             method: "POST",
             body: formData,
         })
             .then((res) => {
                 return res.json();
             })
-            .then((picture_url) => {
-                if (picture_url) {
-                    this.setState(picture_url, () =>
+            .then((resp) => {
+                if (resp.picture_url) {
+                    this.setState(resp, () =>
                         console.log("state after:", this.state)
                     );
                 }
-                this.props.updateImgUrl(picture_url);
+                this.props.updateProfileImage(resp.picture_url);
             })
             .catch((err) => {
                 console.log("ERR in fetching pictures from server:", err);
@@ -46,16 +46,20 @@ export default class Uploader extends Component {
         return (
             <>
                 <div className="uploader-box">
-                    <h1 onClick={this.props.toggleUploader}>
-                        Uploader component
-                    </h1>
+                    <h2 onClick={this.props.toggleUploader}>
+                        Would you like to update your picture?
+                    </h2>
                     <input
                         name="file"
                         type="file"
                         accept="image/*"
                         onChange={this.setFile}
                     />
-                    <button onClick={this.upload}>Submit</button>
+                    <button onClick={this.upload}>Update</button>
+                    <div
+                        onClick={this.props.toggleUploader}
+                        className="close"
+                    ></div>
                 </div>
             </>
         );

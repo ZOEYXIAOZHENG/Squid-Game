@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import friendsReducer from "./friends/slice.js";
+import friendsReducer from "./characters/slice.js";
 
 const rootReducer = combineReducers({
     friendsAndWannabes: friendsReducer,

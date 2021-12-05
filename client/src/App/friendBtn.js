@@ -9,16 +9,33 @@ export default function friendBtn() {
 
     // as a result of this fetch our btn should display the correct txt
     useEffect(() => {
-        fetch(`/relation/${otherId}`)
-            .then((res) => res.json())
-            .then(({ relation }) => {
-                console.log("relation:", relation);
-                setRelation(relation);
+        fetch(`/relation/${otherId}.json`)
+            .then((resp) => resp.json())
+            .then((result) => {
+                console.log(result);
+                console.log(otherId);
+                if (result.length == 0) {
+                    setRelation("Make Friend Request");
+                } else if (result[0].accepted) {
+                    setRelation("End Friendship");
+                } else if (
+                    !result[0].accepted &&
+                    result[0].sender_id == otherId
+                ) {
+                    setRelation("Accept Friend Request");
+                } else if (
+                    !result[0].accepted &&
+                    result[0].recipient_id == otherId
+                ) {
+                    setRelation("Cancel Friend Request");
+                } else {
+                    return;
+                }
             });
-    }, []);
+    }, [relation]);
 
     function updateRelation() {
-        fetch(`/relation/${otherId}`, {
+        fetch(`/relation/${otherId}.json`, {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({ relation }),

@@ -26,8 +26,11 @@ fetch("/user/id")
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
             console.log("Cookies GET💡 then render main");
+            const app = (
+                <Provider store={store}>
+                    <App userId={data.userId} />
+                </Provider>
+            );
             ReactDOM.render(app, document.querySelector("main"));
         }
     });
-
-ReactDOM.render(app, document.querySelector("main"));
