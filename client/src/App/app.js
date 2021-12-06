@@ -6,6 +6,7 @@ import FindPeople from "./find-people.js";
 import OtherProfile from "./otherProfile.js";
 import Uploader from "./uploader.js";
 import Friends from "./friends.js";
+import Navibar from "./navibar";
 
 export default class App extends Component {
     constructor(props) {
@@ -68,7 +69,6 @@ export default class App extends Component {
                             updateProfileImage={this.updateProfileImage}
                         />
                     )}
-
                     <header>
                         <img
                             className="applogo"
@@ -83,18 +83,18 @@ export default class App extends Component {
                         />
                     </header>
 
+                    <Route>
+                        <Navibar />
+                    </Route>
                     <Route path="/users">
                         <FindPeople />
                     </Route>
-
                     <Route path="/user/:id">
                         <OtherProfile />
                     </Route>
-
                     <Route path="/friends">
                         <Friends />
                     </Route>
-
                     <Route exact path="/">
                         {this.state.profile && (
                             <Profile
@@ -108,7 +108,6 @@ export default class App extends Component {
                             />
                         )}
                     </Route>
-
                     {/* {this.state.uploaderIsVisible && (
                         <Uploader
                             profileImage={(val) => this.profileImage(val)}

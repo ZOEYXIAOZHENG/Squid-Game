@@ -69,10 +69,10 @@ export default class ResetPassword extends React.Component {
     resetPassword() {
         if (this.state.stage === "start") {
             return (
-                <div>
+                <div id="reset-box">
                     <h4>
                         Please enter your email address below and we will send
-                        you the reset instructions
+                        you the reset instruction:
                     </h4>
 
                     {this.state.error && (
@@ -80,7 +80,7 @@ export default class ResetPassword extends React.Component {
                             Oops!Somenthing wrong, please try again
                         </div>
                     )}
-                    <label> E-mail Address:</label>
+
                     <input
                         type="email"
                         name="email"
@@ -95,9 +95,9 @@ export default class ResetPassword extends React.Component {
         } else if (this.state.stage === "OTP") {
             return (
                 <div>
-                    <h4>
+                    <h3>
                         An email with a verification code has been send to you
-                    </h4>
+                    </h3>
                     <div>
                         <input
                             type="password"

@@ -58,9 +58,10 @@ export default function Friends() {
 
     return (
         <>
-            <div className="friends-wannabes">
+            <div className="overlay"></div>
+            <div className="friends-page">
                 <div className="wannabes">
-                    <h3>There people want to be your friends</h3>
+                    <h3>♾ Who want to be your friends:</h3>
                     {wannabes &&
                         wannabes.map((each) => (
                             <div key={each.id}>
@@ -69,7 +70,7 @@ export default function Friends() {
                                         {each.first_name} {each.last_name}
                                     </h2>
                                     <img
-                                        className="find"
+                                        className="user-list"
                                         src={each.picture_url}
                                         alt={`${each.first_name} ${each.last_name}`}
                                     />
@@ -81,7 +82,7 @@ export default function Friends() {
                         ))}
                 </div>
                 <div className="friends">
-                    <h3>There people are currently your friends</h3>
+                    <h3>♾ Who are currently your friends:</h3>
                     {friends &&
                         friends.map((each) => (
                             <div key={each.id}>
@@ -90,7 +91,7 @@ export default function Friends() {
                                         {each.first_name} {each.last_name}
                                     </h2>
                                     <img
-                                        className="find"
+                                        className="user-list"
                                         src={each.picture_url}
                                         alt={`${each.first_name} ${each.last_name}`}
                                     />

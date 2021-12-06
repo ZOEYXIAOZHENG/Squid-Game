@@ -50,6 +50,7 @@ export default class Uploader extends Component {
                         Would you like to update your picture?
                     </h2>
                     <input
+                        id="button"
                         name="file"
                         type="file"
                         accept="image/*"

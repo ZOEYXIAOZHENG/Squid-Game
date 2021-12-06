@@ -3,10 +3,10 @@ body {
 }
 
 .logo {
-    position: fixed;
+    position: relative;
     top: 0;
     left: 27vw;
-    width: 50%;
+    width: 40%;
     height: auto;
     /* min-width: 1000px; */
     zoom: unset;
@@ -38,19 +38,21 @@ h1 {
     font-weight: 300;
     z-index: 3;
     top: 1vh;
-    /* left: 30vw; */
-    /* position: absolute; */
     width: 30vw;
     height: auto;
 }
 
+h2 {
+    opacity: 0.9;
+}
+
 h3 {
-    font-family: Courier New;
+    font-family: sans-serif;
     font-size: 23px;
     font-weight: light;
     /* letter-spacing: 0.3em; */
     z-index: 20;
-    color: rgb(50, 50, 48);
+    color: rgb(28, 159, 39);
 }
 
 #register-box,
@@ -60,17 +62,30 @@ h3 {
     display: flex;
     justify-items: left;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
     width: 30vw;
     height: 50vh;
-    left: 45vw;
+    left: 40vw;
     top: 45vh;
     position: absolute;
     z-index: 3;
     /* background-color: rgba(255, 247, 247, 0.5); */
 }
 
-#register-box input {
+#reset-box {
+    display: grid;
+    place-items: center;
+    font-family: Roboto, sans-serif;
+    width: 40vw;
+    height: 30vh;
+    position: relative;
+    left: 28vw;
+    gap: 25px;
+}
+
+#register-box input,
+#login-box input,
+#reset-box input {
     background-color: transparent;
     color: #eeeeee;
     outline: none;
@@ -84,10 +99,11 @@ h3 {
 
 img.applogo {
     width: 100vw;
-    height: 25vh;
+    height: 27vh;
     background-color: black;
     object-fit: contain;
     margin: 0;
+    z-index: -1;
 }
 
 .profilepic {
@@ -111,7 +127,7 @@ img.applogo {
 button {
     width: 150px;
     height: 40px;
-    background-color: rgb(27, 144, 33);
+    background-color: rgb(24, 172, 61);
     border-radius: 15px;
     border: white 3px solid;
     cursor: pointer;
@@ -166,13 +182,13 @@ img.find {
     z-index: 99;
 }
 .uploader-box {
-    width: 45vw;
+    width: 40vw;
     height: 35vh;
     background-color: greenyellow;
     display: grid;
     place-items: center;
-    left: 30vw;
-    top: 40vh;
+    left: 27vw;
+    top: 37vh;
     position: absolute;
     border-radius: 15px;
     z-index: 110;
@@ -222,16 +238,7 @@ img.find {
 .close:after {
     transform: rotate(-45deg);
 }
-.link {
-    position: fixed;
-    top: 50vh;
-    right: 7vw;
-}
-.link2 {
-    position: fixed;
-    top: 60vh;
-    right: 7vw;
-}
+
 .search-ppl {
     position: fixed;
     top: 38vh;
@@ -246,3 +253,67 @@ input {
     width: 300px;
     height: auto;
 }
+
+.friends-page {
+    width: 100vw;
+    height: auto;
+    background: url(../3.jpeg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-position: center 0;
+    display: flex;
+    flex-direction: row;
+    /* filter: brightness(50%); */
+    zoom: 1;
+}
+
+.wannabes,
+.friends {
+    width: 30vw;
+    height: 70vh;
+    padding: 2vh 5vw;
+    z-index: 20;
+    border-radius: 12px;
+    background: rgba(9, 9, 10, 0.4);
+    margin-left: 7vw;
+}
+
+.navibar {
+    width: 100vw;
+    height: 4vh;
+    text-align: center;
+    display: inline-flex;
+    justify-content: space-evenly;
+    background-color: rgba(255, 255, 255, 0.8);
+    top: 26vh;
+}
+
+.navibar a:link {
+    font: caption;
+    font-family: monospace;
+    font-size: 22px;
+    z-index: 99;
+}
+.navibar a:link:hover {
+    transform: scale(1.3);
+}
+
+a:link {
+    text-decoration: none;
+    color: lawngreen;
+    z-index: 99;
+}
+
+a:hover {
+    color: rgb(230, 32, 131);
+}
+
+.uploader-box #button {
+    width: 320px;
+    height: 45px;
+    font-size: 20px;
+    
+}
+
