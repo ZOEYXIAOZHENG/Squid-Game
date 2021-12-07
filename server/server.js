@@ -9,6 +9,13 @@ const uidSafe = require("uid-safe");
 const cryptoRandomString = require("crypto-random-string");
 const s3 = require("./s3.js");
 
+const server = require("http").Server(app);
+// const socket = io();
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
+
 //------------------------------ STATIC FILES -------------------------------
 
 const { sendEmail } = require("./ses.js");
@@ -24,14 +31,40 @@ app.use(express.json());
 //The express.json() function is a built-in middleware function in Express.
 // It parses incoming requests with JSON payloads and is based on body-parser.
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
+const cookieSessionMiddleware = cookieSession({
+    secret: COOKIE_SECRET,
+    maxAge: 1000 * 60 * 60 * 24 * 90,
+    sameSite: true, // Web security --- to against CSRF
+});
 
-app.use(
-    cookieSession({
-        secret: COOKIE_SECRET,
-        maxAge: 1000 * 60 * 60 * 24 * 90,
-        sameSite: true, // Web security --- to against CSRF
-    })
-);
+app.use(cookieSessionMiddleware);
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+
+io.on("connection", (socket) => {
+    // only logged in users can be connected
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+
+    db.getLastTenChatMessages()
+        .then(({ rows }) => {
+            console.log(rows);
+            socket.emit("chatMessages", rows);
+        })
+        .catch((err) => {
+            console.log("err getting last 10 messages: ", err);
+        });
+
+    socket.on("newChatMessage", (message) => {
+        console.log("message: ", message);
+        // add message to DB
+        // get users name and image url from DB
+        // send back to client
+        io.emit("test", "MESSAGE received");
+    });
+});
 
 app.use((req, res, next) => {
     res.setHeader("x-frame-options", "deny");
@@ -308,10 +341,6 @@ app.post("/profile/upload", uploader.single("file"), s3.upload, (req, res) => {
     }
 });
 
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
-});
-
 app.post("/bioedit.json", (req, res) => {
     const userId = req.session.userId;
     const bio = req.body.draftBio;
@@ -329,6 +358,14 @@ app.post("/bioedit.json", (req, res) => {
                 error: true,
             });
         });
+});
+
+app.post("/add-messages", (req, res) => {
+    db.addNewMessage(req.session.userId, req.body.)
+});
+
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
 app.listen(process.env.PORT || 3001, function () {

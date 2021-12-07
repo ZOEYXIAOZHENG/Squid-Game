@@ -219,3 +219,15 @@ module.exports.getFriendsAndWannabes = (id) => {
     const params = [id];
     return db.query(q, params);
 };
+
+module.exports.getLastTenChatMessages = () => {
+    const q = `SELECT user_id, message, created_at FROM chat_messages
+             ORDER BY id DESC LIMIT 10`;
+    return db.query(q);
+};
+
+module.exports.addNewMessage = (userId, msg) => {
+    const q = `INSERT INTO messages (user_id, message) VALUES($1, $2)`;
+    const params = [userId ,msg];
+    return db.query(q, params);
+};

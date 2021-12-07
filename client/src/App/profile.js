@@ -1,6 +1,5 @@
 import ProfilePic from "./profilepic.js";
 import BioEditor from "./bioeditor.js";
-import { Link } from "react-router-dom";
 
 export default function Profile({
     first,
@@ -12,7 +11,7 @@ export default function Profile({
     uploader,
 }) {
     return (
-        <div>
+        <>
             <div className="profile-box">
                 <div className="profile-text">
                     <h1>
@@ -24,8 +23,6 @@ export default function Profile({
                 </div>
                 <ProfilePic pictureUrl={pictureUrl} uploader={uploader} />
             </div>
-            
-            <a href="/logout">logout</a>
-        </div>
+        </>
     );
 }

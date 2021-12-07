@@ -40,7 +40,7 @@ export default class Login extends React.Component {
         return (
             <>
                 <div id="login-box">
-                    <h2>Login:</h2>
+                    <h2> </h2>
                     {this.state.error && (
                         <div className="error">
                             Oops!Somenthing wrong, please try again

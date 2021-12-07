@@ -7,11 +7,14 @@ import * as immutableState from "redux-immutable-state-invariant";
 import { composeWithDevTools } from "redux-devtools-extension";
 import reducer from "./redux/reducer.js";
 import { Provider } from "react-redux";
+import { init } from "./App/socket.js";
 
 const store = createStore(
     reducer,
     composeWithDevTools(applyMiddleware(immutableState.default()))
 );
+
+console.log("store", store);
 
 fetch("/user/id")
     .then((response) => response.json())
@@ -19,6 +22,7 @@ fetch("/user/id")
         if (!data.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
+            init(store);
             console.log("Cookies GET💡 then render main");
             const app = (
                 <Provider store={store}>

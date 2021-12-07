@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 const Navibar = () => {
     return (
@@ -7,13 +6,16 @@ const Navibar = () => {
                 <Link to="/friends">FRIENDS</Link>
             </li>
             <li>
+                <Link to="/chat"> CHAT</Link>
+            </li>
+            <li>
                 <Link to="/users">FIND PEOPLE</Link>
             </li>
             <li>
                 <Link to="/"> MY DATA</Link>
             </li>
             <li>
-                <Link to="/logout">LOGOUT</Link>
+                <a href="/logout">LOGOUT</a>
             </li>
         </div>
     );

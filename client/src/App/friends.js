@@ -66,9 +66,9 @@ export default function Friends() {
                         wannabes.map((each) => (
                             <div key={each.id}>
                                 <Link to={`/user/${each.id}`}>
-                                    <h2>
+                                    <h4>
                                         {each.first_name} {each.last_name}
-                                    </h2>
+                                    </h4>
                                     <img
                                         className="user-list"
                                         src={each.picture_url}
@@ -87,9 +87,9 @@ export default function Friends() {
                         friends.map((each) => (
                             <div key={each.id}>
                                 <Link to={`/user/${each.id}`}>
-                                    <h2>
+                                    <h4>
                                         {each.first_name} {each.last_name}
-                                    </h2>
+                                    </h4>
                                     <img
                                         className="user-list"
                                         src={each.picture_url}

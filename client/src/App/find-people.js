@@ -29,6 +29,7 @@ export default function FindPeople() {
 
     return (
         <>
+            <div id="find-ppl-base"></div>
             <div className="search-ppl">
                 <h3>Are you looking for someone in particular?</h3>
                 <input

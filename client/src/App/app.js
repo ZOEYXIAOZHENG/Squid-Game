@@ -7,6 +7,7 @@ import OtherProfile from "./otherProfile.js";
 import Uploader from "./uploader.js";
 import Friends from "./friends.js";
 import Navibar from "./navibar";
+import Chat from "./chat.js";
 
 export default class App extends Component {
     constructor(props) {
@@ -95,6 +96,8 @@ export default class App extends Component {
                     <Route path="/friends">
                         <Friends />
                     </Route>
+                    <Route path="/logout"></Route>
+
                     <Route exact path="/">
                         {this.state.profile && (
                             <Profile
@@ -107,6 +110,9 @@ export default class App extends Component {
                                 userId={this.props.userId}
                             />
                         )}
+                    </Route>
+                    <Route path="/chat">
+                        <Chat />
                     </Route>
                     {/* {this.state.uploaderIsVisible && (
                         <Uploader
