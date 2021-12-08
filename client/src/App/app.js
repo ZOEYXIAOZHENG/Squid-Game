@@ -8,6 +8,7 @@ import Uploader from "./uploader.js";
 import Friends from "./friends.js";
 import Navibar from "./navibar";
 import Chat from "./chat.js";
+import Delete from "./delete.js";
 
 export default class App extends Component {
     constructor(props) {
@@ -96,7 +97,9 @@ export default class App extends Component {
                     <Route path="/friends">
                         <Friends />
                     </Route>
-                    <Route path="/logout"></Route>
+                    <Route path="/delete">
+                        <Delete />
+                    </Route>
 
                     <Route exact path="/">
                         {this.state.profile && (

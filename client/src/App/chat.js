@@ -3,37 +3,68 @@ import { useSelector } from "react-redux";
 import { socket } from "./socket";
 
 export default function Chat() {
-    const chatMessages = useSelector((state) => state?.chatMessages);
+    const msgs = useSelector((state) => state?.msgs);
+    // const chatMessages = useSelector((state) => state?.chatMessages);
     const textareaRef = useRef();
     const chatContainerRef = useRef();
 
     useEffect(() => {
         chatContainerRef.current.scrollTop =
             chatContainerRef.current.scrollHeight;
-    }, [chatMessages]);
+    }, [msgs]);
 
     const keyCheck = (e) => {
         if (e.key === "Enter") {
-
             console.log("connected here!!");
             e.preventDefault();
             // socket
-                // .emit("newChatMessage", {
-                //     msg: e.target.value,
-                // })
-                // .then((resp) => resp.json())
-                // .then((resp) => console.log(resp));
-
-                console.log("oli is here!", e.target.value);
-            socket.emit("newChatMessage", e.target.value);
+            // .emit("newChatMessage", {
+            //     msg: e.target.value,
+            // })
+            // .then((resp) => resp.json())
+            // .then((resp) => console.log(resp));
+            socket.emit("chatMessage", e.target.value);
             textareaRef.current.value = "";
+        }
+    };
+
+    var mapMessage = (msg) => {
+        if (msg.is_myself) {
+            return (
+                <div key={msg.id} className="own-msg-box">
+                    <div className="msg-inner">
+                        <p>
+                            {msg.first_name} {msg.last_name}: {msg.message}
+                        </p>
+                    </div>
+                    <div className="msg-inner">
+                        <img className="person-list" src={msg.picture_url} />
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div key={msg.id} className="msg-box">
+                    <div className="msg-inner">
+                        <img className="person-list" src={msg.picture_url} />
+                    </div>
+                    <div className="msg-inner">
+                        <p>
+                            {msg.first_name} {msg.last_name}: {msg.message}
+                        </p>
+                    </div>
+                </div>
+            );
         }
     };
 
     return (
         <>
+            <div id="chat-base"></div>
+            <div id="extension"></div>
             <div className="chat-container" ref={chatContainerRef}>
                 <p>～～～～MESSAGES RECORD～～～～</p>
+                {msgs?.map(mapMessage)}
             </div>
             <textarea
                 className="input-box"

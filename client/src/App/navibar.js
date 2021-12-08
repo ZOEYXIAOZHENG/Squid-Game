@@ -17,6 +17,9 @@ const Navibar = () => {
             <li>
                 <a href="/logout">LOGOUT</a>
             </li>
+            <li>
+                <Link to="/delete">DELETE</Link>
+            </li>
         </div>
     );
 };

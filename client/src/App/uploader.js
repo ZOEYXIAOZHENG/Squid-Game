@@ -13,12 +13,12 @@ export default class Uploader extends Component {
             {
                 file: e.target.files[0],
             },
-            () => console.log("setFile state --> ", this.state)
+            () => console.log("setFile state:", this.state)
         );
     }
     upload() {
         console.log(this.state.file);
-        console.log("upload state -->", this.state);
+        console.log("🟡 upload state 🟡:", this.state);
         const formData = new FormData();
         formData.append("file", this.state.file);
 

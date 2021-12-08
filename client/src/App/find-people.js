@@ -29,28 +29,35 @@ export default function FindPeople() {
 
     return (
         <>
+            <div id="find-ppl-container"></div>
             <div id="find-ppl-base"></div>
+
             <div className="search-ppl">
-                <h3>Are you looking for someone in particular?</h3>
-                <input
-                    type="text"
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <h3>New joined players:</h3>
-                {users.map((each) => (
-                    <div key={each.id}>
-                        <Link to={`/user/${each.id}`}>
-                            <h2>
-                                {each.first_name} {each.last_name}
-                            </h2>
-                            <img
-                                className="find"
-                                src={each.picture_url}
-                                alt={`${each.first_name} ${each.last_name}`}
-                            />
-                        </Link>
-                    </div>
-                ))}
+                <div id="search-box">
+                    <h3>Are you looking for someone in particular?</h3>
+                    <input
+                        type="text"
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+
+                    {users.map((each) => (
+                        <div key={each.id} className="person-list">
+                            <Link to={`/user/${each.id}`}>
+                                <h4>
+                                    {each.first_name} {each.last_name}
+                                </h4>
+                                <img
+                                    className="find"
+                                    src={each.picture_url}
+                                    alt={`${each.first_name} ${each.last_name}`}
+                                />
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+                <div id="show-box">
+                    <h3>New joined players:</h3>
+                </div>
             </div>
         </>
     );

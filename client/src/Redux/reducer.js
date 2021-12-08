@@ -4,7 +4,7 @@ import chatMessagesReducer from "./messages/slice.js";
 
 const rootReducer = combineReducers({
     friendsAndWannabes: friendsReducer,
-    chatMessages: chatMessagesReducer,
+    msgs: chatMessagesReducer,
 });
 
 export default rootReducer;

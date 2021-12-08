@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+
 const cookieSession = require("cookie-session");
 const compression = require("compression");
 const multer = require("multer");
@@ -40,29 +41,39 @@ io.use(function (socket, next) {
     cookieSessionMiddleware(socket.request, socket.request.res, next);
 });
 
+//------------------------------------  SOCKET.IO  --------------------------------------------
+
 io.on("connection", (socket) => {
-    console.log("user connected!!");
-    // only logged in users can be connected
     if (!socket.request.session.userId) {
         return socket.disconnect(true);
     }
+    console.log(
+        `user with socket id ${socket.id} and id ${socket.request.session.userId} just connected`
+    );
 
-    // db.getLastTenChatMessages()
-    //     .then(({ rows }) => {
-    //         // console.log(rows);
-    //         socket.emit("chatMessages", rows);
-    //     })
-    //     .catch((err) => {
-    //         console.log("err getting last 10 messages: ", err);
-    //     });
+    db.getLastTenChatMessages(socket.request.session.userId)
+        .then((results) => {
+            socket.emit("chatMessages", results.rows.reverse());
+        })
+        .catch((err) => {
+            console.log("err in getLastTenChatMessages:", err);
+        });
 
-    // socket.on("newChatMessage", (message) => {
-    //     console.log("message: ", message);
-    //     // add message to DB
-    //     // get users name and image url from DB
-    //     // send back to client
-    //     io.emit("test", "MESSAGE received");
-    // });
+    socket.on("chatMessage", (message) => {
+        //1. insert into db
+        //2. get users data using their userid
+        //3. emit message object to every connected user
+        db.addNewMessage(socket.request.session.userId, message)
+            .then(() => {
+                db.getMessages(socket.request.session.userId).then((result) => {
+                    io.emit("chatMessage", result.rows[0]);
+                });
+                // console.log("data.rows[0]", data.rows);
+            })
+            .catch((err) => {
+                console.log("error in messenger", err);
+            });
+    });
 });
 
 app.use((req, res, next) => {
@@ -134,6 +145,10 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+app.get("/delete", (req, res) => {
+    db.deleteUser(req.session.userId).then(() => res.json({ success: true }));
+});
+
 app.get("/relation/:id.json", (req, res) => {
     db.getRelation(req.session.userId, req.params.id)
         .then((resp) => res.json(resp.rows))
@@ -185,6 +200,8 @@ app.get("/friends-and-wannabes", (req, res) => {
         });
 });
 
+// ----------------------------  Register  --------------------------------
+
 app.post("/register", function (req, res) {
     db.hashPassword(req.body.password)
         .then((hash) => {
@@ -221,6 +238,7 @@ app.post("/register", function (req, res) {
 //         });
 //     }
 // });
+// -----------------------------  Login  --------------------------------
 
 app.post("/login", (req, res) => {
     db.showHashPw(req.body.email)
@@ -247,7 +265,7 @@ app.post("/login", (req, res) => {
         });
 });
 
-// **********************************  Rest-Password  **************************************:
+// -------------------------------- Rest-Password --------------------------------
 
 //1.Confirm with the submitted user email address
 //2.Generate a secret code and STORE it, so it can be retrieved later
@@ -310,7 +328,7 @@ app.post("/password/reset/verify", (req, res) => {
         });
 });
 
-//******************************************************************************************/
+// ----------------------------- Profile  -----------------------------
 
 app.get("/profile", function (req, res) {
     db.getProfile(req.session.userId).then(({ rows }) => {
@@ -359,43 +377,10 @@ app.post("/bioedit.json", (req, res) => {
         });
 });
 
-//------------------------------------  SOCKET.IO  --------------------------------------------
-
-io.on("connection", (socket) => {
-    if (!socket.request.session.userId) {
-        return socket.disconnect(true);
-    }
-    console.log(
-        `user with socket id ${socket.id} and id ${socket.request.session.userId} just connected`
-    );
-
-    db.getLastTenChatMessages()
-        .then(({ rows }) => {
-            // console.log("rows in getLastMessages -> ", rows)
-            socket.emit("chatMessages", rows);
-        })
-        .catch((err) => {
-            console.log("err in getLastTenChatMessages:", err);
-        });
-    socket.on("newMessage", (message) => {
-        db.addNewMessage(socket.request.session.userId, message)
-            .then(({ rows }) => {
-                return db.getLastTenChatMessages(rows[0].id);
-            })
-            .then((data) => {
-                // console.log("data.rows[0]", data.rows);
-                io.emit("newChatMessage", data.rows[0]);
-            })
-            .catch((err) => {
-                console.log("error in messenger", err);
-            });
-    });
-});
-
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
+server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
