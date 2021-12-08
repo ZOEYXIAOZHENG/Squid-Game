@@ -47,22 +47,22 @@ io.on("connection", (socket) => {
         return socket.disconnect(true);
     }
 
-    db.getLastTenChatMessages()
-        .then(({ rows }) => {
-            console.log(rows);
-            socket.emit("chatMessages", rows);
-        })
-        .catch((err) => {
-            console.log("err getting last 10 messages: ", err);
-        });
+    // db.getLastTenChatMessages()
+    //     .then(({ rows }) => {
+    //         // console.log(rows);
+    //         socket.emit("chatMessages", rows);
+    //     })
+    //     .catch((err) => {
+    //         console.log("err getting last 10 messages: ", err);
+    //     });
 
-    socket.on("newChatMessage", (message) => {
-        console.log("message: ", message);
-        // add message to DB
-        // get users name and image url from DB
-        // send back to client
-        io.emit("test", "MESSAGE received");
-    });
+    // socket.on("newChatMessage", (message) => {
+    //     console.log("message: ", message);
+    //     // add message to DB
+    //     // get users name and image url from DB
+    //     // send back to client
+    //     io.emit("test", "MESSAGE received");
+    // });
 });
 
 app.use((req, res, next) => {
@@ -359,9 +359,37 @@ app.post("/bioedit.json", (req, res) => {
         });
 });
 
-app.post("/add-messages", (req, res) => {
-    db.addNewMessage(req.session.userId, req.body.msg);
-    res.json({ success: true });
+//------------------------------------  SOCKET.IO  --------------------------------------------
+
+io.on("connection", (socket) => {
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+    console.log(
+        `user with socket id ${socket.id} and id ${socket.request.session.userId} just connected`
+    );
+
+    db.getLastTenChatMessages()
+        .then(({ rows }) => {
+            // console.log("rows in getLastMessages -> ", rows)
+            socket.emit("chatMessages", rows);
+        })
+        .catch((err) => {
+            console.log("err in getLastTenChatMessages:", err);
+        });
+    socket.on("newMessage", (message) => {
+        db.addNewMessage(socket.request.session.userId, message)
+            .then(({ rows }) => {
+                return db.getLastTenChatMessages(rows[0].id);
+            })
+            .then((data) => {
+                // console.log("data.rows[0]", data.rows);
+                io.emit("newChatMessage", data.rows[0]);
+            })
+            .catch((err) => {
+                console.log("error in messenger", err);
+            });
+    });
 });
 
 app.get("*", function (req, res) {
