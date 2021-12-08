@@ -14,16 +14,17 @@ export default function Chat() {
 
     const keyCheck = (e) => {
         if (e.key === "Enter") {
+
+            console.log("connected here!!");
             e.preventDefault();
-            fetch("/add-messages", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ msg: e.target.value }),
-            })
-                .then((resp) => resp.json())
-                .then((resp) => console.log(resp));
+            // socket
+                // .emit("newChatMessage", {
+                //     msg: e.target.value,
+                // })
+                // .then((resp) => resp.json())
+                // .then((resp) => console.log(resp));
+
+                console.log("oli is here!", e.target.value);
             socket.emit("newChatMessage", e.target.value);
             textareaRef.current.value = "";
         }
@@ -32,7 +33,7 @@ export default function Chat() {
     return (
         <>
             <div className="chat-container" ref={chatContainerRef}>
-                <p>～～～～聊天记录～～～～</p>
+                <p>～～～～MESSAGES RECORD～～～～</p>
             </div>
             <textarea
                 className="input-box"

@@ -28,8 +28,6 @@ const COOKIE_SECRET =
 
 app.use(compression());
 app.use(express.json());
-//The express.json() function is a built-in middleware function in Express.
-// It parses incoming requests with JSON payloads and is based on body-parser.
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 const cookieSessionMiddleware = cookieSession({
     secret: COOKIE_SECRET,
@@ -43,6 +41,7 @@ io.use(function (socket, next) {
 });
 
 io.on("connection", (socket) => {
+    console.log("user connected!!");
     // only logged in users can be connected
     if (!socket.request.session.userId) {
         return socket.disconnect(true);
@@ -361,7 +360,8 @@ app.post("/bioedit.json", (req, res) => {
 });
 
 app.post("/add-messages", (req, res) => {
-    db.addNewMessage(req.session.userId, req.body.)
+    db.addNewMessage(req.session.userId, req.body.msg);
+    res.json({ success: true });
 });
 
 app.get("*", function (req, res) {

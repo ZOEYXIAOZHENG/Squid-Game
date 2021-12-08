@@ -7,8 +7,11 @@ import {
 export let socket;
 
 export const init = (store) => {
+    
     if (!socket) {
         socket = io.connect();
+        console.log("init runs!",socket);
+        
 
         socket.on("chatMessages", (msgs) =>
             store.dispatch(chatMessagesReceived(msgs))

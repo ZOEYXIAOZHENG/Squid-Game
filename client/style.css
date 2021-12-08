@@ -349,13 +349,15 @@ a:hover {
 
 .chat-container {
     overflow-y: scroll;
+    display: flexbox;
+    flex-direction: column-reverse;
     width: 35vw;
     height: 50vh;
     background: greenyellow;
     opacity: 0.9;
     left: 30vw;
     position: fixed;
-    padding:20px 15px;
+    padding: 20px 15px;
 }
 
 .input-box {
