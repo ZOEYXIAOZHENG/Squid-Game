@@ -18,6 +18,7 @@ export default function friendsReducer(friendsAndWannabes = null, action) {
         friendsAndWannabes = friendsAndWannabes.filter(
             (person) => person.id !== action.payload.id
         );
+        console.log(friendsAndWannabes);
     }
     return friendsAndWannabes;
 }
@@ -38,7 +39,7 @@ export function acceptFriendRequest(id) {
 
 export function unfriend(id) {
     return {
-        type: "friends/unfriended",
+        type: "friends/unfriend",
         payload: { id },
     };
 }

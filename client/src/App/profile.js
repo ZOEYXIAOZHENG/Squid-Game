@@ -19,7 +19,7 @@ export default function Profile({
                     </h1>
                     <h2>ID:{userId}</h2>
                     <BioEditor updateBio={updateBio} bio={bio} />
-                    {bio && <h4>Bio: {bio}</h4>}
+                    {bio && <h2>Bio: {bio}</h2>}
                 </div>
                 <ProfilePic pictureUrl={pictureUrl} uploader={uploader} />
             </div>

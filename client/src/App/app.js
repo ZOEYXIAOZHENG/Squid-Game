@@ -86,7 +86,7 @@ export default class App extends Component {
                     </header>
 
                     <Route>
-                        <Navibar />
+                        <Navibar numOfWannbes={this.state.num_of_wannabes} />
                     </Route>
                     <Route path="/users">
                         <FindPeople />

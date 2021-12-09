@@ -46,13 +46,18 @@ export default function Friends() {
 
     const unfriendFriend = (id) => {
         return function () {
+            console.log("unfriend onclick function");
             fetch(`/relation/${id}.json`, {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({ relation: "End Friendship" }),
             })
-                .then((resp) => resp.json())
-                .then(() => dispatch(unfriend(id)));
+                .then((resp) => {
+                    console.log("unfriend response");
+                    return resp.json();
+                })
+                .then(() => dispatch(unfriend(id)))
+                .catch((err) => console.log(err));
         };
     };
 
@@ -61,10 +66,11 @@ export default function Friends() {
             <div className="overlay"></div>
             <div className="friends-page">
                 <div className="wannabes">
-                    <h3>♾ Who want to be your friends:</h3>
+                    <h3> Friends Request: </h3>
                     {wannabes &&
                         wannabes.map((each) => (
-                            <div key={each.id}>
+                            <div key={each.id} className="request-box">
+                                {" "}
                                 <Link to={`/user/${each.id}`}>
                                     <h4>
                                         {each.first_name} {each.last_name}
@@ -82,25 +88,30 @@ export default function Friends() {
                         ))}
                 </div>
                 <div className="friends">
-                    <h3>♾ Who are currently your friends:</h3>
-                    {friends &&
-                        friends.map((each) => (
-                            <div key={each.id}>
-                                <Link to={`/user/${each.id}`}>
-                                    <h4>
-                                        {each.first_name} {each.last_name}
-                                    </h4>
-                                    <img
-                                        className="user-list"
-                                        src={each.picture_url}
-                                        alt={`${each.first_name} ${each.last_name}`}
-                                    />
-                                </Link>
-                                <button onClick={unfriendFriend(each.id)}>
-                                    unfriend
-                                </button>
-                            </div>
-                        ))}
+                    <h3>
+                        ♾ Your Friends currently: {friends && friends.length}
+                    </h3>
+
+                    <div className="your-friends-list">
+                        {friends &&
+                            friends.map((each) => (
+                                <div key={each.id}>
+                                    <Link to={`/user/${each.id}`}>
+                                        <h4>
+                                            {each.first_name} {each.last_name}
+                                        </h4>
+                                        <img
+                                            className="user-list"
+                                            src={each.picture_url}
+                                            alt={`${each.first_name} ${each.last_name}`}
+                                        />
+                                    </Link>
+                                    <button onClick={unfriendFriend(each.id)}>
+                                        unfriend
+                                    </button>
+                                </div>
+                            ))}
+                    </div>
                 </div>
             </div>
         </>

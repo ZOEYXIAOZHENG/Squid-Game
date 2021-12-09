@@ -37,7 +37,7 @@ body {
 
 h1 {
     font-family: Courier New;
-    font-size: 2em;
+    font-size: 2.5em;
     font-weight: 300;
     z-index: 3;
     top: 1vh;
@@ -120,11 +120,27 @@ img.applogo {
 }
 
 img.user-list,
-.person-list img {
+.person-list img,
+#new-list img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     z-index: 100;
+}
+#new-list {
+    width: 35vw;
+    height: 67vh;
+    position: fixed;
+    top: 33vh;
+    left: 5vw;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+}
+
+#new-list input {
+    width: 18vw;
+    height: 3vh;
 }
 
 .profile-box .profilepic {
@@ -202,6 +218,7 @@ textarea {
     float: right;
     /* margin-left: 15vw; */
     padding: 100px 60px;
+    font-family: sans-serif;
 }
 
 .uploader-box {
@@ -269,8 +286,9 @@ textarea {
     left: 2vw;
     display: flex;
     flex-direction: row;
-    gap: 15vw;
     padding: 20px 20px;
+    width: 35vw;
+    height: 70vh;
 }
 
 input {
@@ -278,8 +296,19 @@ input {
     height: 35px;
 }
 
+.view-ppl {
+    margin-top: 3vh;
+    width: 80vw;
+    height: 50vh;
+    display: flex;
+    position: fixed;
+    top: 33vh;
+    left: 15vw;
+    gap: 5vw;
+}
+
 .view-ppl img {
-    width: 300px;
+    width: 20vw;
     height: auto;
 }
 
@@ -322,19 +351,13 @@ input {
     background-color: black;
     z-index: -22;
 }
-/* .person-list img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-} */
+
 .wannabes,
-.friends,
-#search-box,
-#show-box {
+.friends {
     width: 30vw;
     height: 68vh;
     padding: 20px 2vw;
-    z-index: 20;
+    z-index: 30;
     border-radius: 12px;
     margin-left: 5vw;
 }
@@ -343,7 +366,22 @@ input {
 .friends {
     background: rgba(28, 39, 27, 0.3);
     backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
 }
+
+.request-box {
+    display: inline;
+    gap: 4vw;
+}
+
+/* .request-box button {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+} */
 
 .navibar {
     width: 100vw;
@@ -386,8 +424,8 @@ a:hover {
     overflow-y: scroll;
     display: flexbox;
     flex-direction: column-reverse;
-    width: 50vw;
-    height: 50vh;
+    width: 46vw;
+    height: 48vh;
     background-color: rgba(101, 116, 61, 0.5);
     right: 10vw;
     top: 33vh;
@@ -396,6 +434,7 @@ a:hover {
     z-index: 10;
     border-radius: 15px;
     gap: 10px;
+    border: rgb(236, 246, 246) 5px solid;
 }
 
 .input-box {
@@ -408,16 +447,42 @@ a:hover {
     height: 30px;
     width: 50vw;
     top: 88vh;
-    left: 47vw;
+    left: 42vw;
     z-index: 10;
 }
+
 .person-list {
     display: flex;
     flex-direction: column;
     width: 40px;
     height: 40px;
+    gap: 13px;
+    line-height: 40px;
 }
 
+.find-results {
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+    height: 17vh;
+    gap: 2vh;
+}
+
+#new-list a {
+    display: flex;
+    gap: 2vw;
+    line-height: 8vh;
+    font-size: 12px;
+    color: rgb(252, 254, 252);
+    font-family: Georgia;
+    font-weight: lighter;
+    letter-spacing: 0.07em;
+}
+
+#new-list a:hover {
+    color: rgb(205, 27, 225);
+    transform: scale(1.2);
+}
 .msg-box {
     width: 20vw;
     height: 50px;
@@ -460,7 +525,49 @@ a:hover {
     display: flex;
     float: right;
     width: 28vw;
-    height: 50px;
+    height: 3.5vh;
     gap: 10px;
-    flex-direction: column;
+    flex-direction: row-reverse;
+}
+
+.yes-btn,
+.no-btn {
+    color: white;
+    padding: 15px 25px;
+    text-decoration: none;
+}
+
+.yes-btn {
+    background-color: #e32727;
+    margin-left: 3vw;
+    margin-right: 5vw;
+}
+
+.no-btn {
+    background-color: #199319;
+}
+
+.add-friend button {
+    width: 13vw;
+    height: 5vh;
+    font-family: "Helvetica";
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 50px;
+    appearance: none;
+    background-color: #ff0080;
+    color: white;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+    box-shadow: 0 5px 25px rgba(255, 0, 130, 0.5);
+}
+
+.add-friend button:hover {
+    background-color: rgb(41, 28, 220);
+}
+.enterText {
+    color: white;
 }

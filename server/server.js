@@ -113,7 +113,7 @@ app.get("/user/id", function (req, res) {
 });
 
 app.get("/users.json", (req, res) => {
-    db.getTopUsers()
+    db.getTopUsers(req.session.userId)
         .then((resp) => res.json(resp.rows))
         .catch((err) => {
             console.log(err);
@@ -121,6 +121,7 @@ app.get("/users.json", (req, res) => {
 });
 
 app.get("/user-search/:letters.json", (req, res) => {
+    console.log("search_users", req.session);
     db.searchUsers(req.params.letters, req.session.userId).then((resp) =>
         res.json(resp.rows)
     );
@@ -146,7 +147,10 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/delete", (req, res) => {
-    db.deleteUser(req.session.userId).then(() => res.json({ success: true }));
+    db.deleteUser(req.session.userId).then(() => {
+        req.session = null;
+        res.redirect("/");
+    });
 });
 
 app.get("/relation/:id.json", (req, res) => {
@@ -332,8 +336,15 @@ app.post("/password/reset/verify", (req, res) => {
 
 app.get("/profile", function (req, res) {
     db.getProfile(req.session.userId).then(({ rows }) => {
-        let { first_name, last_name, email, picture_url, bio, created_at } =
-            rows[0];
+        let {
+            first_name,
+            last_name,
+            email,
+            picture_url,
+            bio,
+            created_at,
+            num_of_wannabes,
+        } = rows[0];
         res.json({
             first_name,
             last_name,
@@ -341,6 +352,7 @@ app.get("/profile", function (req, res) {
             picture_url,
             bio,
             created_at,
+            num_of_wannabes,
         });
     });
 });

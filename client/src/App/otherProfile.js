@@ -21,14 +21,19 @@ export default function OtherProfile() {
     }, []);
 
     return (
-        <div className="view-ppl">
-            <img src={users.picture_url || "/default.jpeg"} />
-            <h3>
-                {users.first} {users.last}
-            </h3>
-            <h2>email: {users.email}</h2>
-            {users.bio && <p>{users.bio}</p>}
-            <FriendBtn />
-        </div>
+        <>
+            <div className="view-ppl">
+                <img src={users.picture_url || "/default.jpeg"} />
+                <div className="profile-text">
+                    <h1>
+                        {users.first_name} {users.last_name}
+                    </h1>
+                    {/* <h3>{users.created_at}</h3> */}
+                    <h4>email: {users.email}</h4>
+                    {users.bio && <p>{users.bio}</p>}
+                    <FriendBtn />
+                </div>
+            </div>
+        </>
     );
 }

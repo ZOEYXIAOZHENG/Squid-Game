@@ -1,12 +1,22 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 const Navibar = () => {
+    const numOfWannabes = useSelector((state) => {
+        console.log(state.friendsAndWannabes);
+        return (
+            state.friendsAndWannabes &&
+            state.friendsAndWannabes.filter((fw) => !fw.accepted).length
+        );
+    });
+
     return (
         <div className="navibar">
             <li>
-                <Link to="/friends">FRIENDS</Link>
+                <Link to="/friends">FRIENDS {numOfWannabes > 0 && "❣️"}</Link>
             </li>
             <li>
-                <Link to="/chat"> CHAT</Link>
+                <Link to="/chat">CHAT</Link>
             </li>
             <li>
                 <Link to="/users">FIND PEOPLE</Link>

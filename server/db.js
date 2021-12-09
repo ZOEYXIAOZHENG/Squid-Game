@@ -106,9 +106,11 @@ module.exports.addProfilePic = ({ url, userId }) => {
 };
 
 module.exports.getProfile = (userId) => {
-    const q = `SELECT first_name, last_name, email, picture_url, bio, created_at 
-                    FROM users
-                    WHERE id = $1`;
+    const q = `SELECT first_name, last_name, email, picture_url, bio, created_at, num_of_wannabes
+                    FROM users u
+                    LEFT JOIN (SELECT u.id, count(*) as num_of_wannabes FROM users u LEFT JOIN friendships ON u.id = recipient_id WHERE u.id = $1 GROUP BY 1)t
+                    ON u.id = t.id
+                    WHERE u.id = $1`;
     const params = [userId];
     return db.query(q, params);
 };
@@ -145,11 +147,13 @@ module.exports.getUserData = (userId) => {
     return db.query(q, params);
 };
 
-module.exports.getTopUsers = () => {
+module.exports.getTopUsers = (userId) => {
     const q = `SELECT first_name, last_name, id, picture_url FROM users
+                WHERE id != $1
                 ORDER BY id DESC
                 LIMIT 3`;
-    return db.query(q);
+    const params = [userId];
+    return db.query(q, params);
 };
 
 module.exports.searchUsers = (letters, userId) => {
@@ -221,7 +225,7 @@ module.exports.getFriendsAndWannabes = (id) => {
 };
 
 module.exports.getLastTenChatMessages = (userId) => {
-    const q = `SELECT c.id, user_id, message, first_name, last_name, picture_url, c.created_at, user_id = $1 as is_myself FROM chat_messages c
+    const q = `SELECT c.id, user_id, message, first_name, last_name, picture_url, to_char(c.created_at, 'YYYY-MM-DD HH24:MI:SS') as created_at, user_id = $1 as is_myself FROM chat_messages c
                 LEFT JOIN users u ON c.user_id = u.id
              ORDER BY c.created_at DESC LIMIT 10`;
     const params = [userId];
@@ -235,7 +239,7 @@ module.exports.addNewMessage = (userId, msg) => {
 };
 
 module.exports.getMessages = (userId) => {
-    const q = `SELECT c.id, user_id, message, first_name, last_name, picture_url, c.created_at, true as is_myself
+    const q = `SELECT c.id, user_id, message, first_name, last_name, picture_url, to_char(c.created_at, 'YYYY-MM-DD HH24:MI:SS') as created_at, true as is_myself
                 FROM users u LEFT JOIN chat_messages c ON c.user_id = u.id
                 WHERE user_id = $1
                 ORDER BY c.created_at DESC
@@ -245,7 +249,7 @@ module.exports.getMessages = (userId) => {
 };
 
 module.exports.deleteUser = (userId) => {
-    const q = `DELETE FROM users WHERE id = $1 CASCADE`;
+    const q = `DELETE FROM users WHERE id = $1`;
     const params = [userId];
     return db.query(q, params);
 };
