@@ -12,12 +12,13 @@ export default function Welcome() {
             <div className="base"></div>
             <BrowserRouter>
                 <div>
-                    <Route exact path="/register">
-                        <Register />
-                    </Route>
                     <Route exact path="/">
                         <Enter />
                     </Route>
+                    <Route exact path="/register">
+                        <Register />
+                    </Route>
+
                     <Route exact path="/login">
                         <Login />
                     </Route>

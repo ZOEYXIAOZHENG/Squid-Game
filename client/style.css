@@ -314,7 +314,7 @@ input {
 
 .friends-page {
     width: 100vw;
-    height: auto;
+    height: 100vh;
     background: url(../3.jpeg);
     background-repeat: no-repeat;
     background-size: contain;
@@ -355,7 +355,7 @@ input {
 .wannabes,
 .friends {
     width: 30vw;
-    height: 68vh;
+    height: 100vh;
     padding: 20px 2vw;
     z-index: 30;
     border-radius: 12px;
@@ -407,11 +407,11 @@ input {
 
 a:link {
     text-decoration: none;
-    color: lawngreen;
+    color: rgb(158, 21, 244);
     z-index: 99;
 }
 a:hover {
-    color: rgb(235, 231, 31);
+    color: rgb(24, 149, 76);
 }
 
 .uploader-box #button {
@@ -513,10 +513,6 @@ a:hover {
     background-color: rgba(255, 93, 143, 255);
 }
 
-/* .person-list {
-     height: 30px;
-    width: 30px; 
-} */
 .msg-inner {
     display: flex;
     flex-direction: row;
@@ -570,4 +566,43 @@ a:hover {
 }
 .enterText {
     color: white;
+}
+
+.delete {
+    position: fixed;
+    width: 100vw;
+    height: 60vh;
+    top: 33vh;
+    padding: 10vw 30vh;
+}
+
+.enter {
+    position: fixed;
+    top: 0;
+    left: 2%;
+    width: 100%;
+    height: auto;
+    zoom: 1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center 0;
+    z-index: 50;
+}
+
+.enter a {
+    z-index: 100;
+    position: absolute;
+    top: 21vh;
+    right: 53vw;
+    /* background-color: rgb(206, 56, 208); */
+    color: white;
+    text-decoration: underline overline rgb(191, 64, 104) 5px;
+    text-transform: uppercase;
+    font-size: 22px;
+}
+
+.enter a:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+    color: rgb(137, 10, 137);
 }

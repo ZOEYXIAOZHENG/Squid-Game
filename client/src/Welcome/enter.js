@@ -4,7 +4,7 @@ export default function Enter() {
         <div className="enter">
             <img src="./enter.gif" />
             <a href="/register" className="enterText">
-                ENTER
+                Enter
             </a>
         </div>
     );
