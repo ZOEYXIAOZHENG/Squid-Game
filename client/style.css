@@ -355,33 +355,23 @@ input {
 .wannabes,
 .friends {
     width: 30vw;
-    height: 100vh;
+    height: 90vh;
     padding: 20px 2vw;
     z-index: 30;
     border-radius: 12px;
     margin-left: 5vw;
-}
-
-.wannabes,
-.friends {
     background: rgba(28, 39, 27, 0.3);
     backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
+    overflow: hidden;
 }
 
 .request-box {
     display: inline;
     gap: 4vw;
 }
-
-/* .request-box button {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-} */
 
 .navibar {
     width: 100vw;
