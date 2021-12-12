@@ -34,8 +34,8 @@ export default function Chat() {
                 <div key={msg.id} className="own-msg-box">
                     <div className="msg-inner">
                         <p>
-                            {msg.created_at} {msg.first_name} {msg.last_name}:{" "}
-                            {msg.message}
+                            {/* {msg.created_at}   */}
+                            {msg.first_name} {msg.last_name}: {msg.message}
                         </p>
                     </div>
                     <div className="msg-inner">
@@ -51,7 +51,8 @@ export default function Chat() {
                     </div>
                     <div className="msg-inner">
                         <p>
-                            {msg.created_at} {msg.first_name} {msg.last_name}:{" "}
+                            {/* {msg.created_at} */}
+                            {msg.first_name} {msg.last_name}: 
                             {msg.message}
                         </p>
                     </div>

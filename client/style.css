@@ -365,7 +365,7 @@ input {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .request-box {
@@ -410,37 +410,6 @@ a:hover {
     font-size: 20px;
 }
 
-.chat-container {
-    overflow-y: scroll;
-    display: flexbox;
-    flex-direction: column-reverse;
-    width: 46vw;
-    height: 48vh;
-    background-color: rgba(101, 116, 61, 0.5);
-    right: 10vw;
-    top: 33vh;
-    position: fixed;
-    padding: 20px 15px;
-    z-index: 10;
-    border-radius: 15px;
-    gap: 10px;
-    border: rgb(236, 246, 246) 5px solid;
-}
-
-.input-box {
-    position: fixed;
-    left: 30vw;
-    /* bottom: 1vh; */
-    background-color: rgba(101, 116, 61, 0.5);
-    border-radius: 12px;
-    padding: 20px 10px;
-    height: 30px;
-    width: 50vw;
-    top: 88vh;
-    left: 42vw;
-    z-index: 10;
-}
-
 .person-list {
     display: flex;
     flex-direction: column;
@@ -473,11 +442,43 @@ a:hover {
     color: rgb(205, 27, 225);
     transform: scale(1.2);
 }
-.msg-box {
-    width: 20vw;
-    height: 50px;
+
+.chat-container {
+    overflow-y: scroll;
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    width: 46vw;
+    height: 48vh;
+    background-color: rgba(101, 116, 61, 0.5);
+    right: 10vw;
+    top: 33vh;
+    position: fixed;
+    padding: 20px 15px;
+    z-index: 10;
+    border-radius: 15px;
+    gap: 15px;
+    border: rgb(236, 246, 246) 5px solid;
+}
+
+.input-box {
+    position: fixed;
+    left: 30vw;
+    /* bottom: 1vh; */
+    background-color: rgba(101, 116, 61, 0.5);
+    border-radius: 12px;
+    padding: 20px 10px;
+    height: 30px;
+    width: 50vw;
+    top: 88vh;
+    left: 42vw;
+    z-index: 10;
+}
+
+.msg-box {
+    width: 35vw;
+    height: auto;
+    display: flex;
+    gap: 0.5em;
 }
 
 #chat-base {
@@ -504,16 +505,25 @@ a:hover {
 }
 
 .msg-inner {
+    max-width: 70%;
+    height: fit-content;
     display: flex;
-    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f4f7;
+    padding: 0.1em 0.5em;
+    border-radius: 12px;
+    box-shadow: 0px 0px 6px #b2b2b2;
 }
 .own-msg-box {
     display: flex;
-    float: right;
-    width: 28vw;
-    height: 3.5vh;
-    gap: 10px;
-    flex-direction: row-reverse;
+    /* position: relative; */
+    flex-direction: row;
+    max-width: 70%;
+    gap: 0.5em;
+    align-self: flex-end;
+    text-align: right;
+    height: fit-content;
 }
 
 .yes-btn,
