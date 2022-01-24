@@ -12,7 +12,7 @@ ongoing feature:
 
 
 ## Stack:
-- Redux | NodeJS & NPM | React-Router| Socket.io| Webpack
+ Redux | NodeJS & NPM | React-Router| Socket.io| Webpack | PostgreSQL
 
 ## Preview
 - Welcome page and Authentication 
