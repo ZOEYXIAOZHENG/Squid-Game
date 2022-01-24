@@ -41,41 +41,6 @@ io.use(function (socket, next) {
     cookieSessionMiddleware(socket.request, socket.request.res, next);
 });
 
-//------------------------------------  SOCKET.IO  --------------------------------------------
-
-io.on("connection", (socket) => {
-    if (!socket.request.session.userId) {
-        return socket.disconnect(true);
-    }
-    console.log(
-        `user with socket id ${socket.id} and id ${socket.request.session.userId} just connected`
-    );
-
-    db.getLastTenChatMessages(socket.request.session.userId)
-        .then((results) => {
-            socket.emit("chatMessages", results.rows.reverse());
-        })
-        .catch((err) => {
-            console.log("err in getLastTenChatMessages:", err);
-        });
-
-    socket.on("chatMessage", (message) => {
-        //1. insert into db
-        //2. get users data using their userid
-        //3. emit message object to every connected user
-        db.addNewMessage(socket.request.session.userId, message)
-            .then(() => {
-                db.getMessages(socket.request.session.userId).then((result) => {
-                    io.emit("chatMessage", result.rows[0]);
-                });
-                // console.log("data.rows[0]", data.rows);
-            })
-            .catch((err) => {
-                console.log("error in messenger", err);
-            });
-    });
-});
-
 app.use((req, res, next) => {
     res.setHeader("x-frame-options", "deny");
     console.log(req.url);
@@ -102,8 +67,7 @@ const uploader = multer({
         fileSize: 2097152,
     },
 });
-
-//--------------------------------  ROUTE  -----------------------------------------
+//--------------------------------  ROUTE  ----------------------------------------
 
 app.get("/user/id", function (req, res) {
     console.log(req.session);
@@ -119,6 +83,8 @@ app.get("/users.json", (req, res) => {
             console.log(err);
         });
 });
+
+//----------------------------   Find People  ---------------------------------------
 
 app.get("/user-search/:letters.json", (req, res) => {
     console.log("search_users", req.session);
@@ -139,18 +105,6 @@ app.get("/user/:id.json", (req, res) => {
         .catch((err) => {
             console.log(err);
         });
-});
-
-app.get("/logout", (req, res) => {
-    req.session = null;
-    res.redirect("/");
-});
-
-app.get("/delete", (req, res) => {
-    db.deleteUser(req.session.userId).then(() => {
-        req.session = null;
-        res.redirect("/");
-    });
 });
 
 app.get("/relation/:id.json", (req, res) => {
@@ -269,7 +223,7 @@ app.post("/login", (req, res) => {
         });
 });
 
-// -------------------------------- Rest-Password --------------------------------
+// --------------------------- Rest-Password --------------------------------
 
 //1.Confirm with the submitted user email address
 //2.Generate a secret code and STORE it, so it can be retrieved later
@@ -357,8 +311,12 @@ app.get("/profile", function (req, res) {
     });
 });
 
+// --------------------------  upload profile picture  ---------------------------------
+
 app.post("/profile/upload", uploader.single("file"), s3.upload, (req, res) => {
     console.log("req.file", req.file);
+    const fs = require("fs");
+    console.log(fs.createReadStream(req.file.path));
     if (req.file) {
         const userId = req.session.userId;
         const url = `https://s3.amazonaws.com/spicedling/${req.file.filename}`;
@@ -389,10 +347,57 @@ app.post("/bioedit.json", (req, res) => {
         });
 });
 
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/");
+});
+
+app.get("/delete", (req, res) => {
+    db.deleteUser(req.session.userId).then(() => {
+        req.session = null;
+        res.redirect("/");
+    });
+});
+
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
 server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
+});
+
+//------------------------------------  SOCKET.IO / Chat ------------------------------------------
+
+io.on("connection", (socket) => {
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+    console.log(
+        `user with socket id ${socket.id} and id ${socket.request.session.userId} just connected`
+    );
+
+    db.getLastTenChatMessages(socket.request.session.userId)
+        .then((results) => {
+            socket.emit("chatMessages", results.rows.reverse());
+        })
+        .catch((err) => {
+            console.log("err in getLastTenChatMessages:", err);
+        });
+
+    socket.on("chatMessage", (message) => {
+        //1. insert into db
+        //2. get users data using their userid
+        //3. emit message object to every connected user
+        db.addNewMessage(socket.request.session.userId, message)
+            .then(() => {
+                db.getMessages(socket.request.session.userId).then((result) => {
+                    io.emit("chatMessage", result.rows[0]);
+                });
+                // console.log("data.rows[0]", data.rows);
+            })
+            .catch((err) => {
+                console.log("error in messenger", err);
+            });
+    });
 });
