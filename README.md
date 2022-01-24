@@ -1,5 +1,18 @@
 # Squid-Game
-Social Networks Project "Squid Game" : working with React.js, incl: register and login page, database, password encryption, profile edit, add friends, live chat, cookies for session etc.(Redux/NodeJS & NPM/React-Router/socket.io/Webpack)
+This is a social networks project, working with ReactJS: 
+- register and login page, supporting reset password if user forget password(ses).
+- database, password encryption.
+- profile page with different editable fields, picture uploader with AWS.
+- search people, add friends, delete friends
+- live chat 
+- cookies for session etc.
+
+ongoing feature:
+- check online users
+
+
+## Stack:
+- Redux | NodeJS & NPM | React-Router| Socket.io| Webpack
 
 ## Preview
 - Welcome page and Authentication 
