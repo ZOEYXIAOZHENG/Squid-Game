@@ -11,8 +11,8 @@ ongoing feature:
 - check online users
 
 
-## Stack:
- Redux | NodeJS & NPM | React-Router| Socket.io| Webpack | PostgreSQL
+## Language & Tools:
+ Redux | NodeJS & NPM | React-Router| Socket.io| Webpack | PostgreSQL| AWS
 
 ## Preview
 - Welcome page and Authentication 
