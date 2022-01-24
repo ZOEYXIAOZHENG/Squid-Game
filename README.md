@@ -1,5 +1,5 @@
 # Squid-Game
-### Features: this is a social networks project, working with ReactJS: 
+### Features: this is a social networks project: 
 - register and login page, supporting reset password if user forget password(ses).
 - database, password encryption.
 - profile page with different editable fields, picture uploader with AWS.
