@@ -35,3 +35,11 @@ ongoing feature:
 
 https://user-images.githubusercontent.com/90629487/150806664-fbbaf21f-451d-444c-902c-2b9fc8a613fe.mp4
 
+<br>
+
+- main functions: search/add friends, live chat
+
+https://user-images.githubusercontent.com/90629487/150872676-2d543407-ac63-418b-afff-7247e631f0bd.mp4
+
+
+
